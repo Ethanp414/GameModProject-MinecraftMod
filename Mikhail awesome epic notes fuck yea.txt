@@ -1,0 +1,2 @@
+https://learn.microsoft.com/en-us/minecraft/creator/documents/addcustomitems?view=minecraft-bedrock-stable
+https://forge.gemwire.uk/wiki/Making_Items
