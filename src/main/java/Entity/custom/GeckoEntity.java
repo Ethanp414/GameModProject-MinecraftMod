@@ -1,10 +1,15 @@
 package Entity.custom;
 
 import Entity.ModEntities;
+import dibs.bossfight.DePaulDibsBossFight;
+import io.netty.util.AttributeMap;
 import net.minecraft.client.multiplayer.chat.LoggedChatMessage.Player;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,7 +23,11 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 public class GeckoEntity extends Animal
 {
@@ -29,6 +38,12 @@ public class GeckoEntity extends Animal
     public GeckoEntity(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         //TODO Auto-generated constructor stub
+    }
+
+    public GeckoEntity(EntityType<? extends GeckoEntity> type, Level level, double x, double y, double z) 
+    {
+        this(type, level);
+        this.setPos(x, y, z);
     }
 
     @Override
@@ -81,6 +96,22 @@ public class GeckoEntity extends Animal
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
         return ModEntities.GECKO.get().create(level, getSpawnType());
+    }
+
+    //might be required?
+    @Override
+    protected void readAdditionalSaveData(ValueInput input) {}
+
+    @Override
+    protected void addAdditionalSaveData(ValueOutput output) {}
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
+
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) 
+    {
+        return super.hurtServer(level, damageSource, amount);
     }
 
 }
