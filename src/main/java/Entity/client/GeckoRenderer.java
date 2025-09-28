@@ -43,6 +43,6 @@ public class GeckoRenderer extends LivingEntityRenderer<GeckoEntity, LivingEntit
 
     @Override
     public ResourceLocation getTextureLocation(LivingEntityRenderState state) {
-        return ResourceLocation.fromNamespaceAndPath("depauldibsbossfight", "textures/entity/gecko.png");
+        return ResourceLocation.fromNamespaceAndPath("depauldibsbossfight", "textures/entity/gecko_green.png");
     }
 }
