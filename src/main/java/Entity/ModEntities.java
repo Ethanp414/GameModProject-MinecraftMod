@@ -13,20 +13,29 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.flag.FeatureFlags;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.Tags.EntityTypes;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModEntities 
 {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, DePaulDibsBossFight.MODID);
 
-    
-    public static final Supplier<EntityType<Animal>> GECKO = 
-        ENTITY_TYPES.register("gecko", ()-> new EntityType<>(GeckoEntity::new, MobCategory.CREATURE,
-         false, true, false, false, null, null, 0, 0, 0, null, null, null)
-    
-);
+    //public static final DeferredHolder<EntityType
+
+    public static final DeferredHolder<EntityType<?>, EntityType<GeckoEntity>> GECKO =
+            ENTITY_TYPES.register("gecko",
+                (Supplier<EntityType<GeckoEntity>>) () -> {
+                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "gecko");
+                    ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
+
+                    return EntityType.Builder.<GeckoEntity>of(GeckoEntity::new, MobCategory.CREATURE)
+                            .sized(0.6f, 0.6f)
+                            .requiredFeatures(FeatureFlags.VANILLA)
+                            .build(key);                                
+                });
 
     public static void register(IEventBus eventBus)
     {

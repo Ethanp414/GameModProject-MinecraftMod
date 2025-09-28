@@ -14,64 +14,91 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-public class GeckoModel //extends EntityModel<GeckoRenderState>
+public class GeckoModel extends EntityModel<LivingEntityRenderState>
 {
-// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-/*
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("DePaulDibsBossFight", "gecko"), "main");
-	private final ModelPart Body;
-	private final ModelPart Head;
+	// Storing specific model parts as fields for use below.
+    private final ModelPart head;
 
-	public GeckoModel(ModelPart root) 
+	protected GeckoModel(ModelPart root) 
 	{
-		this.Body = root.getChild("Body");
-		this.Head = this.Body.getChild("Head");
+		super(root);
+		this.head = root.getChild("head");
 	}
+	// A static method in which we create our layer definition. createBodyLayer() is the name
+    // most vanilla models use. If you have multiple layers, you will have multiple of these static methods.
+    public static LayerDefinition createBodyLayer() 
+	{
+        // Create our mesh.
+        MeshDefinition mesh = new MeshDefinition();
+        // The mesh initially contains no object other than the root, which is invisible (has a size of 0x0x0).
+        PartDefinition root = mesh.getRoot();
+        // We add a head part.
+        PartDefinition head = root.addOrReplaceChild(
+            // The name of the part.
+            "head",
+            // The CubeListBuilder we want to add.
+            CubeListBuilder.create()
+                // The UV coordinates to use within the texture. Texture binding itself is explained below.
+                // In this example, we start at U=10, V=20.
+                .texOffs(10, 20)
+                // Add our cube. May be called multiple times to add multiple cubes.
+                // This is relative to the parent part. For the root part, it is relative to the entity's position.
+                // Be aware that the y axis is flipped, i.e. "up" is subtractive and "down" is additive.
+                .addBox(
+                    // The top-left-back corner of the cube, relative to the parent object's position.
+                    -5, -5, -5,
+                    // The size of the cube.
+                    10, 10, 10
+                )
+                // Call texOffs and addBox again to add another cube.
+                .texOffs(30, 40)
+                .addBox(-1, -1, -1, 1, 1, 1)
+                // Various overloads of addBox() are available, which allow for additional operations
+                // such as texture mirroring, texture scaling, specifying the directions to be rendered,
+                // and a global scale to all cubes, known as a CubeDeformation.
+                // This example uses the latter, please check the usages of the individual methods for more examples.
+                .texOffs(50, 60)
+                .addBox(5, 5, 5, 4, 4, 4),
+            // The initial positioning to apply to all elements of the CubeListBuilder. Besides PartPose#offset,
+            // PartPose#offsetAndRotation is also available. This can be reused across multiple PartDefinitions.
+            // This may not be used by all models. For example, making custom armor layers will use the associated
+            // player (or other humanoid) renderer's PartPose instead to have the armor "snap" to the player model.
+            PartPose.offset(0, 8, 0)
+        );
+        // We can now add children to any PartDefinition, thus creating a hierarchy.
+        //PartDefinition part1 = root.addOrReplaceChild(...);
+        //PartDefinition part2 = head.addOrReplaceChild(...);
+        //PartDefinition part3 = part1.addOrReplaceChild(...);
+        // At the end, we create a LayerDefinition from the MeshDefinition.
+        // The two integers are the expected dimensions of the texture; 64x32 in our example.
+        return LayerDefinition.create(mesh, 64, 32);
+    }
 
-	public static LayerDefinition createBodyLayer() {
-		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
+	public static final ModelLayerLocation MY_LAYER = new ModelLayerLocation(
+    // Should be the name of the entity this layer belongs to.
+    // May be more generic if this layer can be used on multiple entities.
+    ResourceLocation.fromNamespaceAndPath("depauldibsbossfight", "gecko_entity_model"),
+    // The name of the layer itself. Should be main for the entity's base model,
+    // and a more descriptive name (e.g. "wings") for more specific layers.
+    "main");
 
-		PartDefinition Body = partdefinition.addOrReplaceChild("Body", CubeListBuilder.create().texOffs(0, 0).addBox(-1.25F, -2.25F, -3.0F, 2.5F, 2.25F, 4.5F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 23.5F, 1.0F));
+    // Use this method to update the model rotations, visibility etc. from the render state. If you change the
+    // generic parameter of the EntityModel superclass, this parameter type changes with it.
+    @Override
+    public void setupAnim(LivingEntityRenderState state) {
+        // Calling super to reset all values to default.
+        super.setupAnim(state);
+        // Change the model parts.
+        head.visible = true;
+        head.xRot = 0.0f;
+        head.yRot = 0.0f;
+        head.zRot = 0.0f;
+    }
 
-		PartDefinition Head = Body.addOrReplaceChild("Head", CubeListBuilder.create().texOffs(8, 7).addBox(-1.0F, -1.0623F, -1.9587F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 0).addBox(-0.75F, -0.3123F, -2.4087F, 1.5F, 1.25F, 0.45F, new CubeDeformation(0.0F))
-		.texOffs(4, 19).addBox(-1.25F, -0.8123F, -1.7087F, 0.75F, 0.75F, 0.75F, new CubeDeformation(0.0F))
-		.texOffs(4, 19).mirror().addBox(0.5F, -0.8123F, -1.7087F, 0.75F, 0.75F, 0.75F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, -1.0F, -3.0F));
-
-		PartDefinition Tail = Body.addOrReplaceChild("Tail", CubeListBuilder.create().texOffs(0, 7).addBox(-1.0F, -1.0F, 0.0F, 2.0F, 1.9F, 3.5F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, 1.5F));
-
-		PartDefinition FrontLegL = Body.addOrReplaceChild("FrontLegL", CubeListBuilder.create(), PartPose.offset(1.1986F, -0.4741F, -2.4807F));
-
-		PartDefinition FLegL_r1 = FrontLegL.addOrReplaceChild("FLegL_r1", CubeListBuilder.create().texOffs(11, 12).addBox(-0.1428F, -0.4441F, -0.6528F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.2612F, -0.0259F, 0.0752F, 0.0573F, 0.2106F, 0.2679F));
-
-		PartDefinition FrontLegR = Body.addOrReplaceChild("FrontLegR", CubeListBuilder.create(), PartPose.offset(-1.275F, -0.4804F, -2.5515F));
-
-		PartDefinition FLegR_r1 = FrontLegR.addOrReplaceChild("FLegR_r1", CubeListBuilder.create().texOffs(0, 13).addBox(-1.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, 0.25F, -0.25F, 0.0573F, -0.2106F, -0.2679F));
-
-		PartDefinition BackLegL = Body.addOrReplaceChild("BackLegL", CubeListBuilder.create(), PartPose.offset(1.2612F, -0.5957F, 0.7739F));
-
-		PartDefinition BLegL_r1 = BackLegL.addOrReplaceChild("BLegL_r1", CubeListBuilder.create().texOffs(11, 2).addBox(-0.832F, -0.4122F, -0.4744F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.0612F, -0.0043F, -0.0239F, -0.0883F, -0.3958F, 0.2794F));
-
-		PartDefinition BackLegR = Body.addOrReplaceChild("BackLegR", CubeListBuilder.create(), PartPose.offset(-1.2612F, -0.5957F, 0.7739F));
-
-		PartDefinition BLegR_r1 = BackLegR.addOrReplaceChild("BLegR_r1", CubeListBuilder.create().texOffs(11, 0).addBox(-2.0F, -1.0F, -1.0F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.2612F, 0.5957F, 0.4761F, -0.0883F, 0.3958F, -0.2794F));
-
-		PartDefinition bb_main = partdefinition.addOrReplaceChild("bb_main", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
-
-		PartDefinition camera_r1 = bb_main.addOrReplaceChild("camera_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.0F, 0.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -2.9795F, -0.6308F, 3.1416F));
-
-		return LayerDefinition.create(meshdefinition, 32, 32);
-	}
-
-	public void setupAnim(GeckoEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		Body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-		*/
+    
 }

@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import Entity.ModEntities;
+import Entity.client.ClientEventHandler;
+import Entity.client.ModCommonEvents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -24,6 +26,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -90,6 +93,11 @@ public class DePaulDibsBossFight {
 
 
         ModEntities.register(modEventBus);
+        modEventBus.addListener(ModCommonEvents::onAttributes);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            ClientEventHandler.init(modEventBus);
+        }
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

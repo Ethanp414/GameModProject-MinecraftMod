@@ -106,7 +106,10 @@ public class GeckoEntity extends Animal
     protected void addAdditionalSaveData(ValueOutput output) {}
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
+    protected void defineSynchedData(SynchedEntityData.Builder builder) 
+    {
+        super.defineSynchedData(builder);
+    }
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) 
