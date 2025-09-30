@@ -2,6 +2,7 @@ package Entity;
 
 import java.util.function.Supplier;
 
+import Entity.custom.DibsEntity;
 import Entity.custom.GeckoEntity;
 import dibs.bossfight.DePaulDibsBossFight;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,6 +31,18 @@ public class ModEntities
                             .requiredFeatures(FeatureFlags.VANILLA)
                             .build(key);                                
                 });
+
+    public static final DeferredHolder<EntityType<?>, EntityType<DibsEntity>> DIBS = 
+                ENTITY_TYPES.register("dibs",
+                    (Supplier<EntityType<DibsEntity>>) () -> {
+                        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "dibs");
+                        ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
+
+                        return EntityType.Builder.<DibsEntity>of(DibsEntity::new, MobCategory.MONSTER)
+                            .sized(1, 1)
+                            .requiredFeatures(FeatureFlags.VANILLA)
+                            .build(key);
+                    });
 
     public static void register(IEventBus eventBus)
     {
