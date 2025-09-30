@@ -108,6 +108,11 @@ public class DePaulDibsBossFight {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(EXAMPLE_BLOCK_ITEM);
         }
+
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.BISMUTH);
+        }
+
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
