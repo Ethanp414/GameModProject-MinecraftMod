@@ -8,22 +8,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.flag.FeatureFlags;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.Tags.EntityTypes;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModEntities 
 {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, DePaulDibsBossFight.MODID);
-
-    //public static final DeferredHolder<EntityType
 
     public static final DeferredHolder<EntityType<?>, EntityType<GeckoEntity>> GECKO =
             ENTITY_TYPES.register("gecko",
@@ -41,4 +35,5 @@ public class ModEntities
     {
         ENTITY_TYPES.register(eventBus);
     }
+    
 }

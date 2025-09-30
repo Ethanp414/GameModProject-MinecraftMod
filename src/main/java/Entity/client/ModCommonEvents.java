@@ -2,9 +2,6 @@ package Entity.client;
 
 import Entity.ModEntities;
 import Entity.custom.GeckoEntity;
-import dibs.bossfight.DePaulDibsBossFight;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
 

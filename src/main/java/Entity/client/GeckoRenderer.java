@@ -2,18 +2,12 @@ package Entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import Entity.ModEntities;
 import Entity.custom.GeckoEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class GeckoRenderer extends LivingEntityRenderer<GeckoEntity, LivingEntityRenderState, GeckoModel>
 {   
