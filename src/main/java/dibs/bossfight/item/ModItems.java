@@ -12,10 +12,17 @@ public class ModItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(DePaulDibsBossFight.MODID);
 
+    public static final DeferredItem<Item> BISMUTH = ITEMS.registerItem(
+            "bismuth",
+            Item::new,
+            new Item.Properties()
+    );
 
-    
+
+  /*   
     public static final DeferredItem<Item> BISMUTH = ITEMS.register("bismuth",
             () -> new Item(new Item.Properties()));
+ */
 
     /* 
     // Reuse the ITEMS DeferredRegister declared in the main mod class so we don't create
@@ -25,6 +32,6 @@ public class ModItems {
     */
 
     public static void register(IEventBus eventBus) {
-        //ITEMS.register(eventBus);
+        ITEMS.register(eventBus);
     }
 }
