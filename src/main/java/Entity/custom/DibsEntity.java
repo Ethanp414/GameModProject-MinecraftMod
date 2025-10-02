@@ -1,5 +1,6 @@
 package Entity.custom;
 
+import Entity.client.DibsCombatGoal;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -29,7 +30,6 @@ public class DibsEntity extends Monster
     public DibsEntity(EntityType<? extends Monster> entityType, Level level) 
     {
         super(entityType, level);
-        //TODO Auto-generated constructor stub
     }
 
     public DibsEntity(EntityType<? extends DibsEntity> type, Level level, double x, double y, double z) 
@@ -41,13 +41,7 @@ public class DibsEntity extends Monster
     @Override
     protected void registerGoals() 
     {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.1D, true));
-        this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(1, new DibsCombatGoal(this, 2.5, 15, 1));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 

@@ -30,7 +30,6 @@ public class GeckoEntity extends Animal
 
     public GeckoEntity(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
-        //TODO Auto-generated constructor stub
     }
 
     public GeckoEntity(EntityType<? extends GeckoEntity> type, Level level, double x, double y, double z) 
