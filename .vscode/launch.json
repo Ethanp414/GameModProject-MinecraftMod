@@ -12,11 +12,11 @@
       "projectName": "GameModProject-MinecraftMod",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\clientRunProgramArgs.txt"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\clientRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\clientRunVmArgs.txt",
-        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -34,11 +34,11 @@
       "projectName": "GameModProject-MinecraftMod",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\dataRunProgramArgs.txt"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\dataRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\dataRunVmArgs.txt",
-        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\dataRunVmArgs.txt",
+        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -56,11 +56,11 @@
       "projectName": "GameModProject-MinecraftMod",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\gameTestServerRunProgramArgs.txt"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\gameTestServerRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\gameTestServerRunVmArgs.txt",
-        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\gameTestServerRunVmArgs.txt",
+        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -78,11 +78,11 @@
       "projectName": "GameModProject-MinecraftMod",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\serverRunProgramArgs.txt"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\serverRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\serverRunVmArgs.txt",
-        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\mbaskako\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
+        "@C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003ddepauldibsbossfight%%C:\\Users\\Mikhail\\Documents\\GitHub\\GameModProject-MinecraftMod\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
