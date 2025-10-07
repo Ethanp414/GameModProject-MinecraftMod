@@ -9,5 +9,6 @@
   "depauldibsbossfight.configuration.items": "Item List",
   "depauldibsbossfight.configuration.logDirtBlock": "Log Dirt Block",
   "depauldibsbossfight.configuration.magicNumberIntroduction": "Magic Number Text",
-  "depauldibsbossfight.configuration.magicNumber": "Magic Number"
+  "depauldibsbossfight.configuration.magicNumber": "Magic Number",
+  "entity.depauldibsbossfight.dibs": "Dibs"
 }

@@ -14,13 +14,17 @@ public final class ClientEventHandler {
         modBus.addListener(ClientEventHandler::registerRenderers);
     }
 
-    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions e) {
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions e) 
+    {
+        e.registerLayerDefinition(DibsModel.MY_LAYER, DibsModel::createBodyLayer);
+        
         e.registerLayerDefinition(GeckoModel.MY_LAYER, GeckoModel::createBodyLayer);
     }
 
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers e) {
-        e.registerEntityRenderer(ModEntities.GECKO.get(), (EntityRendererProvider.Context ctx) ->
-            new GeckoRenderer(ctx)
-        );
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers e) 
+    {
+        e.registerEntityRenderer(ModEntities.DIBS.get(), (EntityRendererProvider.Context ctx) -> new DibsRenderer(ctx));
+
+        e.registerEntityRenderer(ModEntities.GECKO.get(), (EntityRendererProvider.Context ctx) -> new GeckoRenderer(ctx));
     }
 }

@@ -4,12 +4,12 @@ import java.util.EnumSet;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.projectile.Snowball;
-import net.minecraft.world.level.block.entity.vault.VaultBlockEntity.Server;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class DibsCombatGoal extends Goal
 {
@@ -71,7 +71,7 @@ public class DibsCombatGoal extends Goal
         boolean inRanged = distSq <= rangedRange * rangedRange;
 
         // Approach target if out of melee/ranged comfortable range
-        if (!inRanged) 
+        if (!inMelee) 
         {
             dibsMob.getNavigation().moveTo(target, moveSpeed);
         } 
@@ -94,6 +94,7 @@ public class DibsCombatGoal extends Goal
             {
                 tryRangedAttack();
             }
+            attackCooldown = 1; // 20 ticks per second, 4 second cooldown between attacks
         }
     }
 
@@ -101,30 +102,26 @@ public class DibsCombatGoal extends Goal
     {
         if(dibsMob.level() instanceof ServerLevel serverLevel)
         {
-            dibsMob.doHurtTarget(serverLevel, dibsMob);
-            attackCooldown = 80; // 20 ticks per second, 4 second cooldown between attacks
+            dibsMob.doHurtTarget(serverLevel, target);
         }
     }
 
     private void tryRangedAttack()
     {
-                if (attackCooldown <= 0) {
-            // Example using a Snowball projectile; replace with arrow or custom projectile
-            Snowball sb = new Snowball(mob.level, mob);
-            double dx = target.getX() - mob.getX();
-            double dy = (target.getY() + (double) target.getEyeHeight() - 1.1) - sb.getY();
-            double dz = target.getZ() - mob.getZ();
-            double distance = Math.sqrt(dx * dx + dz * dz);
+        // Example using a Snowball projectile, can be swapped for custom projectiles
+        ItemStack sBall = new ItemStack(Items.FIRE_CHARGE);
+        Snowball sb = new Snowball(dibsMob.level(), dibsMob, sBall);
+        double dx = target.getX() - dibsMob.getX();
+        double dy = (target.getY() + (double) target.getEyeHeight() - 1.1) - sb.getY();
+        double dz = target.getZ() - dibsMob.getZ();
+        double distance = Math.sqrt(dx * dx + dz * dz);
 
-            // set velocity — tune power and inaccuracy
-            float velocity = (float) (1.6F);
-            float inaccuracy = 4.0F;
-            sb.shoot(dx, dy + distance * 0.2, dz, velocity, inaccuracy);
+    // set velocity — tune power and inaccuracy
+        float velocity = (float) (1.6F);
+        float inaccuracy = 4.0F;
+        sb.shoot(dx, dy + distance * 0.2, dz, velocity, inaccuracy);
 
-            mob.level.addFreshEntity(sb);
-            mob.swing(InteractionHand.MAIN_HAND); // visual swing
-            attackCooldown = 40; // longer cooldown for ranged; tune
-        }
-    }
+        dibsMob.level().addFreshEntity(sb);
+        dibsMob.swing(InteractionHand.MAIN_HAND); // visual swing
     }
 }

@@ -1,6 +1,8 @@
 package Entity.client;
 
-public class DibsRenderState 
-{
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 
+public class DibsRenderState extends LivingEntityRenderState
+{
+    //empty for now
 }
