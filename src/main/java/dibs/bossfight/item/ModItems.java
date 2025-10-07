@@ -18,6 +18,12 @@ public class ModItems {
             new Item.Properties()
     );
 
+    public static final DeferredItem<Item> TOMAHAWK = ITEMS.registerItem(
+            "tomahawk",
+            () -> new dibs.bossfight.item.custom.TomahawkItem(new Item.Properties().stacksTo(16)),
+            new Item.Properties()
+    )
+
 
   /*   
     public static final DeferredItem<Item> BISMUTH = ITEMS.register("bismuth",
