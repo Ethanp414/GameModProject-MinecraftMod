@@ -1,0 +1,216 @@
+package com.github.alexthe666.alexsmobs.effect;
+
+import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
+public class AMEffectRegistry {
+   public static final DeferredRegister<MobEffect> EFFECT_DEF_REG = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, "alexsmobs");
+   public static final DeferredRegister<Potion> POTION_DEF_REG = DeferredRegister.create(ForgeRegistries.POTIONS, "alexsmobs");
+   public static final RegistryObject<MobEffect> KNOCKBACK_RESISTANCE = EFFECT_DEF_REG.register("knockback_resistance", () -> new EffectKnockbackResistance());
+   public static final RegistryObject<MobEffect> LAVA_VISION = EFFECT_DEF_REG.register("lava_vision", () -> new EffectLavaVision());
+   public static final RegistryObject<MobEffect> SUNBIRD_BLESSING = EFFECT_DEF_REG.register("sunbird_blessing", () -> new EffectSunbird(false));
+   public static final RegistryObject<MobEffect> SUNBIRD_CURSE = EFFECT_DEF_REG.register("sunbird_curse", () -> new EffectSunbird(true));
+   public static final RegistryObject<MobEffect> POISON_RESISTANCE = EFFECT_DEF_REG.register("poison_resistance", () -> new EffectPoisonResistance());
+   public static final RegistryObject<MobEffect> OILED = EFFECT_DEF_REG.register("oiled", () -> new EffectOiled());
+   public static final RegistryObject<MobEffect> ORCAS_MIGHT = EFFECT_DEF_REG.register("orcas_might", () -> new EffectOrcaMight());
+   public static final RegistryObject<MobEffect> BUG_PHEROMONES = EFFECT_DEF_REG.register("bug_pheromones", () -> new EffectBugPheromones());
+   public static final RegistryObject<MobEffect> SOULSTEAL = EFFECT_DEF_REG.register("soulsteal", () -> new EffectSoulsteal());
+   public static final RegistryObject<MobEffect> CLINGING = EFFECT_DEF_REG.register("clinging", () -> new EffectClinging());
+   public static final RegistryObject<MobEffect> ENDER_FLU = EFFECT_DEF_REG.register("ender_flu", () -> new EffectEnderFlu());
+   public static final RegistryObject<MobEffect> FEAR = EFFECT_DEF_REG.register("fear", () -> new EffectFear());
+   public static final RegistryObject<MobEffect> TIGERS_BLESSING = EFFECT_DEF_REG.register("tigers_blessing", () -> new EffectTigersBlessing());
+   public static final RegistryObject<MobEffect> DEBILITATING_STING = EFFECT_DEF_REG.register("debilitating_sting", () -> new EffectDebilitatingSting());
+   public static final RegistryObject<MobEffect> EXSANGUINATION = EFFECT_DEF_REG.register("exsanguination", () -> new EffectExsanguination());
+   public static final RegistryObject<MobEffect> EARTHQUAKE = EFFECT_DEF_REG.register("earthquake", () -> new EffectEarthquake());
+   public static final RegistryObject<MobEffect> FLEET_FOOTED = EFFECT_DEF_REG.register("fleet_footed", () -> new EffectFleetFooted());
+   public static final RegistryObject<MobEffect> POWER_DOWN = EFFECT_DEF_REG.register("power_down", () -> new EffectPowerDown());
+   public static final RegistryObject<MobEffect> MOSQUITO_REPELLENT = EFFECT_DEF_REG.register("mosquito_repellent", () -> new EffectMosquitoRepellent());
+   public static final RegistryObject<Potion> KNOCKBACK_RESISTANCE_POTION = POTION_DEF_REG.register(
+      "knockback_resistance", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)KNOCKBACK_RESISTANCE.get(), 3600)})
+   );
+   public static final RegistryObject<Potion> LONG_KNOCKBACK_RESISTANCE_POTION = POTION_DEF_REG.register(
+      "long_knockback_resistance", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)KNOCKBACK_RESISTANCE.get(), 9600)})
+   );
+   public static final RegistryObject<Potion> STRONG_KNOCKBACK_RESISTANCE_POTION = POTION_DEF_REG.register(
+      "strong_knockback_resistance", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)KNOCKBACK_RESISTANCE.get(), 1800, 1)})
+   );
+   public static final RegistryObject<Potion> LAVA_VISION_POTION = POTION_DEF_REG.register(
+      "lava_vision", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)LAVA_VISION.get(), 3600)})
+   );
+   public static final RegistryObject<Potion> LONG_LAVA_VISION_POTION = POTION_DEF_REG.register(
+      "long_lava_vision", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)LAVA_VISION.get(), 9600)})
+   );
+   public static final RegistryObject<Potion> SPEED_III_POTION = POTION_DEF_REG.register(
+      "speed_iii", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance(MobEffects.f_19596_, 2200, 2)})
+   );
+   public static final RegistryObject<Potion> POISON_RESISTANCE_POTION = POTION_DEF_REG.register(
+      "poison_resistance", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)POISON_RESISTANCE.get(), 3600)})
+   );
+   public static final RegistryObject<Potion> LONG_POISON_RESISTANCE_POTION = POTION_DEF_REG.register(
+      "long_poison_resistance", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)POISON_RESISTANCE.get(), 9600)})
+   );
+   public static final RegistryObject<Potion> BUG_PHEROMONES_POTION = POTION_DEF_REG.register(
+      "bug_pheromones", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)BUG_PHEROMONES.get(), 3600)})
+   );
+   public static final RegistryObject<Potion> LONG_BUG_PHEROMONES_POTION = POTION_DEF_REG.register(
+      "long_bug_pheromones", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)BUG_PHEROMONES.get(), 9600)})
+   );
+   public static final RegistryObject<Potion> SOULSTEAL_POTION = POTION_DEF_REG.register(
+      "soulsteal", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)SOULSTEAL.get(), 3600)})
+   );
+   public static final RegistryObject<Potion> LONG_SOULSTEAL_POTION = POTION_DEF_REG.register(
+      "long_soulsteal", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)SOULSTEAL.get(), 9600)})
+   );
+   public static final RegistryObject<Potion> STRONG_SOULSTEAL_POTION = POTION_DEF_REG.register(
+      "strong_soulsteal", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)SOULSTEAL.get(), 1800, 1)})
+   );
+   public static final RegistryObject<Potion> CLINGING_POTION = POTION_DEF_REG.register(
+      "clinging", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)CLINGING.get(), 3600)})
+   );
+   public static final RegistryObject<Potion> LONG_CLINGING_POTION = POTION_DEF_REG.register(
+      "long_clinging", () -> new Potion(new MobEffectInstance[]{new MobEffectInstance((MobEffect)CLINGING.get(), 9600)})
+   );
+
+   public static ItemStack createPotion(RegistryObject<Potion> potion) {
+      return PotionUtils.m_43549_(new ItemStack(Items.f_42589_), (Potion)potion.get());
+   }
+
+   public static ItemStack createPotion(Potion potion) {
+      return PotionUtils.m_43549_(new ItemStack(Items.f_42589_), potion);
+   }
+
+   public static void init() {
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(Potions.f_43590_)}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.BEAR_FUR.get()}),
+            createPotion(KNOCKBACK_RESISTANCE_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(KNOCKBACK_RESISTANCE_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{Items.f_42451_}),
+            createPotion(LONG_KNOCKBACK_RESISTANCE_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(KNOCKBACK_RESISTANCE_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{Items.f_42525_}),
+            createPotion(STRONG_KNOCKBACK_RESISTANCE_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.LAVA_BOTTLE.get()}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.BONE_SERPENT_TOOTH.get()}),
+            createPotion(LAVA_VISION_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(LAVA_VISION_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{Items.f_42451_}),
+            createPotion(LONG_LAVA_VISION_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(Potions.f_43584_)}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.RATTLESNAKE_RATTLE.get()}),
+            new ItemStack((ItemLike)AMItemRegistry.POISON_BOTTLE.get())
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.POISON_BOTTLE.get()}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.CENTIPEDE_LEG.get()}),
+            createPotion(POISON_RESISTANCE_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.KOMODO_SPIT_BOTTLE.get()}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.CENTIPEDE_LEG.get()}),
+            createPotion(POISON_RESISTANCE_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(POISON_RESISTANCE_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.KOMODO_SPIT.get()}),
+            createPotion(LONG_POISON_RESISTANCE_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(Potions.f_43614_)}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.GAZELLE_HORN.get()}),
+            createPotion(SPEED_III_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(Potions.f_43602_)}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.COCKROACH_WING.get()}),
+            createPotion(BUG_PHEROMONES_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(BUG_PHEROMONES_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{Items.f_42451_}),
+            createPotion(LONG_BUG_PHEROMONES_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(Potions.f_43602_)}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.SOUL_HEART.get()}),
+            createPotion(SOULSTEAL_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(SOULSTEAL_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{Items.f_42451_}),
+            createPotion(LONG_SOULSTEAL_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(SOULSTEAL_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{Items.f_42525_}),
+            createPotion(STRONG_SOULSTEAL_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(Potions.f_43602_)}),
+            Ingredient.m_43929_(new ItemLike[]{(ItemLike)AMItemRegistry.DROPBEAR_CLAW.get()}),
+            createPotion(CLINGING_POTION)
+         )
+      );
+      BrewingRecipeRegistry.addRecipe(
+         new ProperBrewingRecipe(
+            Ingredient.m_43927_(new ItemStack[]{createPotion(CLINGING_POTION)}),
+            Ingredient.m_43929_(new ItemLike[]{Items.f_42451_}),
+            createPotion(LONG_CLINGING_POTION)
+         )
+      );
+   }
+}

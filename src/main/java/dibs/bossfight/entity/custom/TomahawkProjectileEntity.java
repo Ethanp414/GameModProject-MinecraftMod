@@ -38,9 +38,11 @@ public class TomahawkProjectileEntity extends AbstractArrow {
         return rotation;
     }
 
+    /*
     public boolean isGrounded() {
         return inGround;
     }
+    */
 
     @Override
     protected void onHitEntity(EntityHitResult result) {

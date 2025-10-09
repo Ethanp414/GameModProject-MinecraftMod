@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: alexsmobs
+Specification-Vendor: alexthe668
+Specification-Version: 1.17.0
+Implementation-Title: AlexsMobs
+Implementation-Version: 1.22.9
+Implementation-Vendor: alexthe668
+MixinConfigs: citadel.mixins.json
+
