@@ -61,7 +61,8 @@ public class DibsEntity extends Monster
         .add(Attributes.MAX_HEALTH, 10d)
         .add(Attributes.MOVEMENT_SPEED, 0.25d)
         .add(Attributes.FOLLOW_RANGE, 24d)
-        .add(Attributes.ATTACK_DAMAGE, 4d);
+        .add(Attributes.ATTACK_DAMAGE, 4d)
+        .add(Attributes.KNOCKBACK_RESISTANCE, 1d);
     }
 
     private void setupAnimationStates()
@@ -89,6 +90,7 @@ public class DibsEntity extends Monster
 
         if (!level().isClientSide) {
             float progress = this.getHealth() / this.getMaxHealth();
+
             // clamp to [0,1] in case of rounding
             if (progress < 0f) progress = 0f;
             if (progress > 1f) progress = 1f;
