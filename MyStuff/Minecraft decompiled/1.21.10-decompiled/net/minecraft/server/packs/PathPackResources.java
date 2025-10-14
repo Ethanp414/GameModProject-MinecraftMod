@@ -1,0 +1,216 @@
+package net.minecraft.server.packs;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
+import com.mojang.logging.LogUtils;
+import com.mojang.serialization.DataResult.Error;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.NotDirectoryException;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import net.minecraft.FileUtil;
+import net.minecraft.SharedConstants;
+import net.minecraft.Util;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.resources.IoSupplier;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+
+public class PathPackResources extends AbstractPackResources {
+   private static final Logger LOGGER = LogUtils.getLogger();
+   private static final Joiner PATH_JOINER = Joiner.on("/");
+   private final Path root;
+
+   public PathPackResources(PackLocationInfo $$0, Path $$1) {
+      super($$0);
+      this.root = $$1;
+   }
+
+   @Nullable
+   @Override
+   public IoSupplier<InputStream> getRootResource(String... $$0) {
+      FileUtil.validatePath($$0);
+      Path $$1 = FileUtil.resolvePath(this.root, List.of($$0));
+      return Files.exists($$1, new LinkOption[0]) ? IoSupplier.create($$1) : null;
+   }
+
+   public static boolean validatePath(Path $$0) {
+      if (!SharedConstants.DEBUG_VALIDATE_RESOURCE_PATH_CASE) {
+         return true;
+      } else if ($$0.getFileSystem() != FileSystems.getDefault()) {
+         return true;
+      } else {
+         try {
+            return $$0.toRealPath().endsWith($$0);
+         } catch (IOException var2) {
+            LOGGER.warn("Failed to resolve real path for {}", $$0, var2);
+            return false;
+         }
+      }
+   }
+
+   @Nullable
+   @Override
+   public IoSupplier<InputStream> getResource(PackType $$0, ResourceLocation $$1) {
+      Path $$2 = this.root.resolve($$0.getDirectory()).resolve($$1.getNamespace());
+      return getResource($$1, $$2);
+   }
+
+   @Nullable
+   public static IoSupplier<InputStream> getResource(ResourceLocation $$0, Path $$1) {
+      return FileUtil.decomposePath($$0.getPath()).mapOrElse($$1x -> {
+         Path $$2 = FileUtil.resolvePath($$1, $$1x);
+         return returnFileIfExists($$2);
+      }, $$1x -> {
+         LOGGER.error("Invalid path {}: {}", $$0, $$1x.message());
+         return null;
+      });
+   }
+
+   @Nullable
+   private static IoSupplier<InputStream> returnFileIfExists(Path $$0) {
+      return Files.exists($$0, new LinkOption[0]) && validatePath($$0) ? IoSupplier.create($$0) : null;
+   }
+
+   @Override
+   public void listResources(PackType $$0, String $$1, String $$2, PackResources.ResourceOutput $$3) {
+      FileUtil.decomposePath($$2).ifSuccess($$3x -> {
+         Path $$4 = this.root.resolve($$0.getDirectory()).resolve($$1);
+         listPath($$1, $$4, $$3x, $$3);
+      }).ifError($$1x -> LOGGER.error("Invalid path {}: {}", $$2, $$1x.message()));
+   }
+
+   public static void listPath(String $$0, Path $$1, List<String> $$2, PackResources.ResourceOutput $$3) {
+      Path $$4 = FileUtil.resolvePath($$1, $$2);
+
+      try {
+         Stream<Path> $$5 = Files.find($$4, Integer.MAX_VALUE, PathPackResources::isRegularFile, new FileVisitOption[0]);
+
+         try {
+            $$5.forEach($$3x -> {
+               String $$4xx = PATH_JOINER.join($$1.relativize($$3x));
+               ResourceLocation $$5 = ResourceLocation.tryBuild($$0, $$4xx);
+               if ($$5 == null) {
+                  Util.logAndPauseIfInIde(String.format(Locale.ROOT, "Invalid path in pack: %s:%s, ignoring", $$0, $$4xx));
+               } else {
+                  $$3.accept($$5, IoSupplier.create($$3x));
+               }
+            });
+         } catch (Throwable var9) {
+            if ($$5 != null) {
+               try {
+                  $$5.close();
+               } catch (Throwable var8) {
+                  var9.addSuppressed(var8);
+               }
+            }
+
+            throw var9;
+         }
+
+         if ($$5 != null) {
+            $$5.close();
+         }
+      } catch (NotDirectoryException | NoSuchFileException var10) {
+      } catch (IOException var11) {
+         LOGGER.error("Failed to list path {}", $$4, var11);
+      }
+   }
+
+   private static boolean isRegularFile(Path $$0, BasicFileAttributes $$1) {
+      if (!SharedConstants.IS_RUNNING_IN_IDE) {
+         return $$1.isRegularFile();
+      } else {
+         return $$1.isRegularFile() && !StringUtils.equalsIgnoreCase($$0.getFileName().toString(), ".ds_store");
+      }
+   }
+
+   @Override
+   public Set<String> getNamespaces(PackType $$0) {
+      Set<String> $$1 = Sets.newHashSet();
+      Path $$2 = this.root.resolve($$0.getDirectory());
+
+      try {
+         DirectoryStream<Path> $$3 = Files.newDirectoryStream($$2);
+
+         try {
+            for(Path $$4 : $$3) {
+               String $$5 = $$4.getFileName().toString();
+               if (ResourceLocation.isValidNamespace($$5)) {
+                  $$1.add($$5);
+               } else {
+                  LOGGER.warn("Non [a-z0-9_.-] character in namespace {} in pack {}, ignoring", $$5, this.root);
+               }
+            }
+         } catch (Throwable var9) {
+            if ($$3 != null) {
+               try {
+                  $$3.close();
+               } catch (Throwable var8) {
+                  var9.addSuppressed(var8);
+               }
+            }
+
+            throw var9;
+         }
+
+         if ($$3 != null) {
+            $$3.close();
+         }
+      } catch (NotDirectoryException | NoSuchFileException var10) {
+      } catch (IOException var11) {
+         LOGGER.error("Failed to list path {}", $$2, var11);
+      }
+
+      return $$1;
+   }
+
+   @Override
+   public void close() {
+   }
+
+   public static class PathResourcesSupplier implements Pack.ResourcesSupplier {
+      private final Path content;
+
+      public PathResourcesSupplier(Path $$0) {
+         this.content = $$0;
+      }
+
+      @Override
+      public PackResources openPrimary(PackLocationInfo $$0) {
+         return new PathPackResources($$0, this.content);
+      }
+
+      @Override
+      public PackResources openFull(PackLocationInfo $$0, Pack.Metadata $$1) {
+         PackResources $$2 = this.openPrimary($$0);
+         List<String> $$3 = $$1.overlays();
+         if ($$3.isEmpty()) {
+            return $$2;
+         } else {
+            List<PackResources> $$4 = new ArrayList($$3.size());
+
+            for(String $$5 : $$3) {
+               Path $$6 = this.content.resolve($$5);
+               $$4.add(new PathPackResources($$0, $$6));
+            }
+
+            return new CompositePackResources($$2, $$4);
+         }
+      }
+   }
+}

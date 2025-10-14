@@ -1,0 +1,36 @@
+package net.minecraft.advancements.critereon;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.codecs.RecordCodecBuilder.Instance;
+import java.util.Optional;
+import javax.annotation.Nullable;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.sheep.Sheep;
+import net.minecraft.world.phys.Vec3;
+
+public record SheepPredicate(Optional<Boolean> sheared) implements EntitySubPredicate {
+   public static final MapCodec<SheepPredicate> CODEC = RecordCodecBuilder.mapCodec(
+      $$0 -> $$0.group(Codec.BOOL.optionalFieldOf("sheared").forGetter(SheepPredicate::sheared)).apply($$0, SheepPredicate::new)
+   );
+
+   @Override
+   public MapCodec<SheepPredicate> codec() {
+      return EntitySubPredicates.SHEEP;
+   }
+
+   @Override
+   public boolean matches(Entity $$0, ServerLevel $$1, @Nullable Vec3 $$2) {
+      if ($$0 instanceof Sheep $$3) {
+         return !this.sheared.isPresent() || $$3.isSheared() == this.sheared.get();
+      } else {
+         return false;
+      }
+   }
+
+   public static SheepPredicate hasWool() {
+      return new SheepPredicate(Optional.of(false));
+   }
+}
