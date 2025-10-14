@@ -17,12 +17,13 @@ public class ModItems {
             Item::new,
             new Item.Properties()
     );
+    
 
     public static final DeferredItem<Item> TOMAHAWK = ITEMS.registerItem(
             "tomahawk",
-            () -> new dibs.bossfight.item.custom.TomahawkItem(new Item.Properties().stacksTo(16)),
+            properties -> new dibs.bossfight.item.custom.TomahawkItem(properties.stacksTo(16)),
             new Item.Properties()
-    )
+    );
 
 
   /*   

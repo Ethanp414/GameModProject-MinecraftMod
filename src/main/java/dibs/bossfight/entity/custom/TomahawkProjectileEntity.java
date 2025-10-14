@@ -13,7 +13,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 
-public class TomahawkProjectileEntity extends AbstractArrow {
+public class TomahawkProjectileEntity extends AbstractArrow implements net.minecraft.client.model.EntityRenderState {
     private float rotation;
     public Vec2 groundedOffset;
 
