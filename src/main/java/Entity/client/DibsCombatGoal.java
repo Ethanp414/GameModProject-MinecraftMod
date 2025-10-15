@@ -94,7 +94,7 @@ public class DibsCombatGoal extends Goal
             {
                 tryRangedAttack();
             }
-            attackCooldown = 1; // 20 ticks per second, 4 second cooldown between attacks
+            attackCooldown = 1; // 20 ticks per second; attacks per second = 20/cooldown
         }
     }
 
@@ -122,6 +122,6 @@ public class DibsCombatGoal extends Goal
         sb.shoot(dx, dy + distance * 0.2, dz, velocity, inaccuracy);
 
         dibsMob.level().addFreshEntity(sb);
-        dibsMob.swing(InteractionHand.MAIN_HAND); // visual swing
+        dibsMob.swing(InteractionHand.MAIN_HAND);
     }
 }
