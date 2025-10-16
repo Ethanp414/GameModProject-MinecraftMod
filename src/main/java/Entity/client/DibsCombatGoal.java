@@ -70,7 +70,7 @@ public class DibsCombatGoal extends Goal
         boolean inMelee = distSq <= meleeRange * meleeRange;
         boolean inRanged = distSq <= rangedRange * rangedRange;
 
-        // Approach target if out of melee/ranged comfortable range
+        // Approach target if out of melee range
         if (!inMelee) 
         {
             dibsMob.getNavigation().moveTo(target, moveSpeed);

@@ -18,10 +18,17 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.manager.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.animatable.processing.AnimationController;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.entity.player.Player;
 
-public class DibsEntity extends Monster
+public class DibsEntity extends Monster implements GeoEntity
 {
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
     private final ServerBossEvent bossEvent =
         new ServerBossEvent(
             Component.translatable("entity.depauldibsbossfight.dibs"),
@@ -141,5 +148,15 @@ public class DibsEntity extends Monster
     public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) 
     {
         return super.hurtServer(level, damageSource, amount);
+    }
+
+    @Override
+    public void registerControllers(ControllerRegistrar controllers) {
+        //empty for now no animations
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 }

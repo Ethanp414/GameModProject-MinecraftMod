@@ -34,6 +34,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import software.bernie.geckolib.GeckoLib;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(DePaulDibsBossFight.MODID)
