@@ -156,11 +156,11 @@ public class DibsEntity extends Monster implements GeoEntity
     }
 
     
-    protected <E extends DibsEntity> PlayState testAnimController(final AnimationTest<GeoAnimatable> animTest) {
-            if (animTest.isMoving())
-                return animTest.setAndContinue(test_anim);
+    protected <E extends GeoAnimatable> PlayState testAnimController(final AnimationTest<E> animTest) {
+        if (animTest.isMoving())
+            return animTest.setAndContinue(test_anim);
 
-            return PlayState.STOP;
+        return PlayState.STOP;
     }
     
     @Override
