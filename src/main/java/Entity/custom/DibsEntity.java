@@ -18,16 +18,21 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager.ControllerRegistrar;
 import software.bernie.geckolib.animatable.processing.AnimationController;
+import software.bernie.geckolib.animatable.processing.AnimationTest;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.entity.player.Player;
 
 public class DibsEntity extends Monster implements GeoEntity
 {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    protected static final RawAnimation test_anim = RawAnimation.begin().thenLoop("animation.model.test");
 
     private final ServerBossEvent bossEvent =
         new ServerBossEvent(
@@ -150,9 +155,18 @@ public class DibsEntity extends Monster implements GeoEntity
         return super.hurtServer(level, damageSource, amount);
     }
 
+    
+    protected <E extends DibsEntity> PlayState testAnimController(final AnimationTest<GeoAnimatable> animTest) {
+            if (animTest.isMoving())
+                return animTest.setAndContinue(test_anim);
+
+            return PlayState.STOP;
+    }
+    
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         //empty for now no animations
+        controllers.add(new AnimationController<>("testing", 20, this::testAnimController));    
     }
 
     @Override
