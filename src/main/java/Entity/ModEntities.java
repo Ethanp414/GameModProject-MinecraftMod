@@ -18,12 +18,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModEntities 
 {
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, DePaulDibsBossFight.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, DePaulDibsBossFight.MOD_ID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<GeckoEntity>> GECKO =
             ENTITY_TYPES.register("gecko",
                 (Supplier<EntityType<GeckoEntity>>) () -> {
-                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "gecko");
+                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MOD_ID, "gecko");
                     ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
 
                     return EntityType.Builder.<GeckoEntity>of(GeckoEntity::new, MobCategory.CREATURE)
@@ -35,7 +35,7 @@ public class ModEntities
     public static final DeferredHolder<EntityType<?>, EntityType<DibsEntity>> DIBS = 
                 ENTITY_TYPES.register("dibs",
                     (Supplier<EntityType<DibsEntity>>) () -> {
-                        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "dibs");
+                        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MOD_ID, "dibs");
                         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
 
                         return EntityType.Builder.<DibsEntity>of(DibsEntity::new, MobCategory.MONSTER)
