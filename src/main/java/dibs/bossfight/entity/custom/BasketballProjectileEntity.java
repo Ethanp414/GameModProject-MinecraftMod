@@ -13,21 +13,21 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 
-public class TomahawkProjectileEntity extends AbstractArrow {
+public class BasketballProjectileEntity extends AbstractArrow {
     private float rotation;
     public Vec2 groundedOffset;
 
-    public TomahawkProjectileEntity(EntityType<? extends AbstractArrow> entityType, Level level) {
+    public BasketballProjectileEntity(EntityType<? extends AbstractArrow> entityType, Level level) {
         super(entityType, level);
     }
 
-    public TomahawkProjectileEntity(LivingEntity shooter, Level level) {
-        super(ModEntities.TOMAHAWK.get(), shooter, level, new ItemStack(ModItems.TOMAHAWK.get()), null);
+    public BasketballProjectileEntity(LivingEntity shooter, Level level) {
+        super(ModEntities.BASKETBALL.get(), shooter, level, new ItemStack(ModItems.BASKETBALL.get()), null);
     }
 
     @Override
     protected ItemStack getDefaultPickupItem() {
-        return new ItemStack(ModItems.TOMAHAWK.get());
+        return new ItemStack(ModItems.BASKETBALL.get());
     }
 
     public float getRenderingRotation() {

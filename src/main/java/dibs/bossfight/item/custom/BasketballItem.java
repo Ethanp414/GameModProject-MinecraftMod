@@ -1,6 +1,6 @@
 package dibs.bossfight.item.custom;
 
-import dibs.bossfight.entity.custom.TomahawkProjectileEntity;
+import dibs.bossfight.entity.custom.BasketballProjectileEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -11,8 +11,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class TomahawkItem extends Item {
-    public TomahawkItem(Properties properties) {
+public class BasketballItem extends Item {
+    public BasketballItem(Properties properties) {
         super(properties);
     }
 
@@ -22,9 +22,9 @@ public class TomahawkItem extends Item {
         pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(),
                 SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (pLevel.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!pLevel.isClientSide) {
-            TomahawkProjectileEntity tomahawkProjectile = new TomahawkProjectileEntity(pPlayer, pLevel);
-            tomahawkProjectile.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 1.5F, 0F);
-            pLevel.addFreshEntity(tomahawkProjectile);
+            BasketballProjectileEntity basketballProjectile = new BasketballProjectileEntity(pPlayer, pLevel);
+            basketballProjectile.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 1.5F, 0F);
+            pLevel.addFreshEntity(basketballProjectile);
         }
 
         pPlayer.awardStat(Stats.ITEM_USED.get(this));

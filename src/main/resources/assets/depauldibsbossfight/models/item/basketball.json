@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "depauldibsbossfight:item/bismuth"
+    "layer0": "depauldibsbossfight:item/basketball"
   }
 
 }
