@@ -1,0 +1,51 @@
+{
+    "type": "entity", 
+    "neoforge:conditions": [
+            
+    ],
+    "functions": [
+    ],
+    "pools": 
+    [ 
+        {
+            "rolls": 1,
+            "bonus_rolls": 0,
+            "name": "dibslootpool1",
+            "conditions": 
+            [
+            ],
+            "functions": 
+            [
+            ],
+            "entries": 
+            [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:dirt", 
+                    "weight": 3, 
+                    "quality": 1, 
+                    "conditions": [],
+                    "functions": []
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "bonus_rolls": 0,
+            "name": "dibslootpool2",
+            "conditions":[],
+            "functions":[],
+            "entries":
+            [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:stick",
+                    "weight": 1,
+                    "quality": 1,
+                    "conditions": [],
+                    "functions": []
+                }
+            ]
+        }
+    ]
+}

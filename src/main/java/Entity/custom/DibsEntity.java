@@ -31,6 +31,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class DibsEntity extends Monster implements GeoEntity
 {
+    //Animations
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     protected static final RawAnimation test_anim = RawAnimation.begin().thenLoop("animation.model.test");
 

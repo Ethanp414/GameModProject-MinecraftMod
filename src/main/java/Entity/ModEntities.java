@@ -39,7 +39,7 @@ public class ModEntities
                         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
 
                         return EntityType.Builder.<DibsEntity>of(DibsEntity::new, MobCategory.MONSTER)
-                            .sized(1, 1)
+                            .sized(1, 4)
                             .requiredFeatures(FeatureFlags.VANILLA)
                             .build(key);
                     });
@@ -48,5 +48,4 @@ public class ModEntities
     {
         ENTITY_TYPES.register(eventBus);
     }
-    
 }
