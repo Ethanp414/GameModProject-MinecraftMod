@@ -42,6 +42,7 @@ public class ModEntities
                             .sized(1, 4)
                             .requiredFeatures(FeatureFlags.VANILLA)
                             .build(key);
+                            
                     });
 
     public static void register(IEventBus eventBus)

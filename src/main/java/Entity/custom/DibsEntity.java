@@ -60,6 +60,8 @@ public class DibsEntity extends Monster implements GeoEntity
         bossEvent.setCreateWorldFog(true);
     }
 
+    
+
     @Override
     protected void registerGoals() 
     {
