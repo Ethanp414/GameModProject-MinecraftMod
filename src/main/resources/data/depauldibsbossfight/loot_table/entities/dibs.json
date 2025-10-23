@@ -21,27 +21,9 @@
             [
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:dirt", 
+                    "name": "depauldibsbossfight:chicago_dog", 
                     "weight": 3, 
                     "quality": 1, 
-                    "conditions": [],
-                    "functions": []
-                }
-            ]
-        },
-        {
-            "rolls": 1,
-            "bonus_rolls": 0,
-            "name": "dibslootpool2",
-            "conditions":[],
-            "functions":[],
-            "entries":
-            [
-                {
-                    "type": "minecraft:item",
-                    "name": "minecraft:stick",
-                    "weight": 1,
-                    "quality": 1,
                     "conditions": [],
                     "functions": []
                 }
