@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import Entity.ModEntities;
+import Entity.client.ClientEventHandler;
+import Entity.client.ModCommonEvents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -13,12 +16,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -60,20 +65,26 @@ public static final String MODID = MOD_ID; // keep only if you really want both 
 public DePaulDibsBossFight(IEventBus modEventBus, ModContainer modContainer) {
     // 1) Registries FIRST
     ModItems.register(modEventBus);
-    Entity.ModEntities.register(modEventBus);                // <-- ADD THIS
+    //Entity.ModEntities.register(modEventBus);                // <-- ADD THIS
     BLOCKS.register(modEventBus);
     CREATIVE_MODE_TABS.register(modEventBus);
 
     // 2) Listeners on the MOD bus
     modEventBus.addListener(this::commonSetup);
     modEventBus.addListener(this::addCreative);
-    modEventBus.addListener(Entity.client.ModCommonEvents::onAttributes); // <-- ADD THIS
+    //modEventBus.addListener(Entity.client.ModCommonEvents::onAttributes); // <-- ADD THIS
 
     // 3) Global bus + config
     NeoForge.EVENT_BUS.register(this);
     modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
-    
+    ModEntities.register(modEventBus);
+    modEventBus.addListener(ModCommonEvents::onAttributes);
+
+    if (FMLEnvironment.dist == Dist.CLIENT) 
+    {
+        ClientEventHandler.init(modEventBus);
+    }
 }
 
 
