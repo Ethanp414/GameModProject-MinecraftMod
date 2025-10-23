@@ -65,14 +65,12 @@ public static final String MODID = MOD_ID; // keep only if you really want both 
 public DePaulDibsBossFight(IEventBus modEventBus, ModContainer modContainer) {
     // 1) Registries FIRST
     ModItems.register(modEventBus);
-    //Entity.ModEntities.register(modEventBus);                // <-- ADD THIS
     BLOCKS.register(modEventBus);
     CREATIVE_MODE_TABS.register(modEventBus);
 
     // 2) Listeners on the MOD bus
     modEventBus.addListener(this::commonSetup);
     modEventBus.addListener(this::addCreative);
-    //modEventBus.addListener(Entity.client.ModCommonEvents::onAttributes); // <-- ADD THIS
 
     // 3) Global bus + config
     NeoForge.EVENT_BUS.register(this);

@@ -8,7 +8,8 @@ import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 public class DibsRenderer<R extends LivingEntityRenderState & GeoRenderState> extends GeoEntityRenderer<DibsEntity, R>
 {
-    public DibsRenderer(EntityRendererProvider.Context ctx) {
+    public DibsRenderer(EntityRendererProvider.Context ctx) 
+    {
         super(ctx, new DibsModel());
         this.shadowRadius = 0.4f;
     }

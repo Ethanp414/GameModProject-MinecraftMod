@@ -16,6 +16,7 @@
             ],
             "functions": 
             [
+                {"function": "minecraft:set_count", "count": 32}
             ],
             "entries": 
             [
