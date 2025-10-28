@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import software.bernie.geckolib.animatable.GeoEntity;
 
 public class DibsCombatGoal extends Goal
 {
@@ -103,6 +104,7 @@ public class DibsCombatGoal extends Goal
         if(dibsMob.level() instanceof ServerLevel serverLevel)
         {
             dibsMob.doHurtTarget(serverLevel, target);
+            ((GeoEntity)dibsMob).triggerAnim("testing", "punchAnim");
         }
     }
 

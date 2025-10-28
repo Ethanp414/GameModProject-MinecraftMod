@@ -24,6 +24,7 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager.ControllerRegistrar;
 import software.bernie.geckolib.animatable.processing.AnimationController;
 import software.bernie.geckolib.animatable.processing.AnimationTest;
+import software.bernie.geckolib.animation.Animation;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -35,14 +36,13 @@ public class DibsEntity extends Monster implements GeoEntity
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     protected static final RawAnimation walk_anim = RawAnimation.begin().thenLoop("walk");
     protected static final RawAnimation idle_anim = RawAnimation.begin().thenLoop("idol");
-    protected static final RawAnimation punch_anim = RawAnimation.begin().thenPlay("punch");
+    protected static final RawAnimation punch_anim = RawAnimation.begin().then("punch", Animation.LoopType.PLAY_ONCE);
 
     private final ServerBossEvent bossEvent =
         new ServerBossEvent(
             Component.translatable("entity.depauldibsbossfight.dibs"),
             BossEvent.BossBarColor.BLUE,
-            BossEvent.BossBarOverlay.PROGRESS
-        );
+            BossEvent.BossBarOverlay.PROGRESS); 
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimemout = 0;
@@ -80,7 +80,7 @@ public class DibsEntity extends Monster implements GeoEntity
         .add(Attributes.MAX_HEALTH, 10d) 
         .add(Attributes.MOVEMENT_SPEED, 0.25d)
         .add(Attributes.FOLLOW_RANGE, 24d)
-        .add(Attributes.ATTACK_DAMAGE, 4d)
+        .add(Attributes.ATTACK_DAMAGE, 1d)
         .add(Attributes.KNOCKBACK_RESISTANCE, 1d);
     }
 
@@ -163,7 +163,8 @@ public class DibsEntity extends Monster implements GeoEntity
     }
 
     
-    protected <E extends GeoAnimatable> PlayState testAnimController(final AnimationTest<E> animTest) {
+    protected <E extends GeoAnimatable> PlayState testAnimController(final AnimationTest<E> animTest) 
+    {
         if (animTest.isMoving())
         {
             return animTest.setAndContinue(walk_anim);
@@ -175,11 +176,14 @@ public class DibsEntity extends Monster implements GeoEntity
 
         return PlayState.STOP;
     }
-    
+
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         //empty for now no animations
-        controllers.add(new AnimationController<>("testing", 20, this::testAnimController));    
+        AnimationController controller = new AnimationController<>("testing", 1, this::testAnimController);   
+        controllers.add(controller);  
+        
+        controller.triggerableAnim("punchAnim", punch_anim);
     }
 
     @Override
