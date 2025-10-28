@@ -33,7 +33,8 @@ public class DibsEntity extends Monster implements GeoEntity
 {
     //Animations
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    protected static final RawAnimation test_anim = RawAnimation.begin().thenLoop("animation.model.test");
+    protected static final RawAnimation walk_anim = RawAnimation.begin().thenLoop("walk");
+    protected static final RawAnimation idle_anim = RawAnimation.begin().thenLoop("idol");
 
     private final ServerBossEvent bossEvent =
         new ServerBossEvent(
@@ -73,7 +74,7 @@ public class DibsEntity extends Monster implements GeoEntity
     public static AttributeSupplier.Builder createAttributes()
     {
         return Animal.createLivingAttributes()
-        .add(Attributes.MAX_HEALTH, 10d)
+        .add(Attributes.MAX_HEALTH, 10d) 
         .add(Attributes.MOVEMENT_SPEED, 0.25d)
         .add(Attributes.FOLLOW_RANGE, 24d)
         .add(Attributes.ATTACK_DAMAGE, 4d)
@@ -161,7 +162,13 @@ public class DibsEntity extends Monster implements GeoEntity
     
     protected <E extends GeoAnimatable> PlayState testAnimController(final AnimationTest<E> animTest) {
         if (animTest.isMoving())
-            return animTest.setAndContinue(test_anim);
+        {
+            return animTest.setAndContinue(walk_anim);
+        }
+        else if(!animTest.isMoving())
+        {
+            return animTest.setAndContinue(idle_anim);
+        }
 
         return PlayState.STOP;
     }

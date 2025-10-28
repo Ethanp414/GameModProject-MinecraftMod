@@ -11,16 +11,16 @@ public class DibsModel extends GeoModel<DibsEntity>
 
     @Override
     public ResourceLocation getModelResource(GeoRenderState renderState) {
-        return ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "geckolib/models/entity/dibsmodel_textured.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "geckolib/models/entity/dibsmodel_final.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(GeoRenderState renderState) {
-        return ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "textures/entity/dibstexture_whole.png");
+        return ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "textures/entity/dibsmodel_final_texture.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(DibsEntity animatable) {
-        return ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "geckolib/animations/entity/dibsmodel.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "geckolib/animations/entity/dibsmodel_final.animation.json");
     }
 }
