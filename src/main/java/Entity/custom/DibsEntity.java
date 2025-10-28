@@ -35,6 +35,7 @@ public class DibsEntity extends Monster implements GeoEntity
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     protected static final RawAnimation walk_anim = RawAnimation.begin().thenLoop("walk");
     protected static final RawAnimation idle_anim = RawAnimation.begin().thenLoop("idol");
+    protected static final RawAnimation punch_anim = RawAnimation.begin().thenPlay("punch");
 
     private final ServerBossEvent bossEvent =
         new ServerBossEvent(
@@ -50,6 +51,8 @@ public class DibsEntity extends Monster implements GeoEntity
     {
         super(entityType, level);
         bossEvent.setVisible(true);
+        bossEvent.setDarkenScreen(true);
+        //bossEvent.setCreateWorldFog(true);
     }
 
     public DibsEntity(EntityType<? extends DibsEntity> type, Level level, double x, double y, double z) 
