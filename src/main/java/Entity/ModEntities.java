@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import Entity.custom.DibsEntity;
 import Entity.custom.GeckoEntity;
+import Entity.custom.BasketballProjectileEntity;
 import dibs.bossfight.DePaulDibsBossFight;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -43,6 +44,12 @@ public class ModEntities
                             .requiredFeatures(FeatureFlags.VANILLA)
                             .build(key);
                     });
+
+
+    // not working copy pasted like this, prob need to alter to fit the deferred register style above
+    public static final Supplier<EntityType<BasketballProjectileEntity>> BASKETBALL = ENTITY_TYPES.registerEntityType(
+    "basketball", BasketballProjectileEntity::new, MobCategory.MISC,
+    builder -> builder.sized(0.5f, 0.5f));
 
     public static void register(IEventBus eventBus)
     {
