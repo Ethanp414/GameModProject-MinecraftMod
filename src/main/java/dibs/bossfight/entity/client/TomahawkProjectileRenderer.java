@@ -1,4 +1,4 @@
-package dibs.bossfight.entity.client;
+/* package dibs.bossfight.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -47,3 +47,5 @@ public class TomahawkProjectileRenderer extends EntityRenderer<TomahawkProjectil
         return ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "textures/entity/tomahawk/tomahawk.png");
     }
 }
+
+*/

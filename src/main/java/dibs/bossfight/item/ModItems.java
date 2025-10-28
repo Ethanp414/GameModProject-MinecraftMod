@@ -25,6 +25,12 @@ public class ModItems {
             new Item.Properties()
     );
 
+    public static final DeferredItem<Item> BASKETBALL = ITEMS.registerItem(
+            "basketball",
+            properties -> new dibs.bossfight.item.custom.BasketballItem(properties.stacksTo(16)),
+            new Item.Properties()
+    );
+
 
   /*   
     public static final DeferredItem<Item> BISMUTH = ITEMS.register("bismuth",

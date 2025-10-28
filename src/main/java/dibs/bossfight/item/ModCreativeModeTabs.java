@@ -28,6 +28,7 @@ public class ModCreativeModeTabs {
         //output.accept(MyItemsClass.MY_ITEM.get());
         //output.accept(ModItems.BISMUTH.get());
         output.accept(ModItems.TOMAHAWK.get());
+        output.accept(ModItems.BASKETBALL.get());
         // Accepts an ItemLike. This assumes that MY_BLOCK has a corresponding item.
         //output.accept(MyBlocksClass.MY_BLOCK.get());
     })
