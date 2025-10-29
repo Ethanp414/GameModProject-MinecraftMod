@@ -7,35 +7,42 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 
-public class BasketballProjectileEntity extends AbstractArrow {
-    public Vec2 groundedOffset;
+public class BasketballProjectileEntity extends ThrowableItemProjectile {
 
-    public BasketballProjectileEntity(EntityType<? extends AbstractArrow> entityType, Level level) {
+    public BasketballProjectileEntity(EntityType<? extends Snowball> entityType, Level level) {
         super(entityType, level);
     }
 
-    public BasketballProjectileEntity(LivingEntity shooter, Level level) {
-        super(ModEntities.BASKETBALL.get(), shooter, level, new ItemStack(ModItems.BASKETBALL.get()), null);
+    public BasketballProjectileEntity(Level level, LivingEntity owner, ItemStack item) {
+        super(EntityType.SNOWBALL, owner, level, item);
     }
 
-    /*
-   public Snowball(Level $$0, double $$1, double $$2, double $$3, ItemStack $$4) {
-      super(EntityType.SNOWBALL, $$1, $$2, $$3, $$0, $$4);
-   }
-   */
+    public BasketballProjectileEntity(Level level, double x, double y, double z, ItemStack item) {
+        super(EntityType.SNOWBALL, x, y, z, level, item);
+    }
 
+
+    /*
     @Override
     protected ItemStack getDefaultPickupItem() {
         return new ItemStack(ModItems.BASKETBALL.get());
     }
-
-
+    */
+    
+    @Override
+    protected Item getDefaultItem() {
+        return ModItems.BASKETBALL.get();
+    }
 
 
     @Override
