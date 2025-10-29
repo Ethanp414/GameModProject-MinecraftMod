@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
@@ -19,8 +18,25 @@ import net.minecraft.world.phys.Vec2;
 
 public class BasketballProjectileEntity extends ThrowableItemProjectile {
 
+
+    public BasketballProjectileEntity(EntityType<? extends ThrowableItemProjectile> type, Level level) {
+        super(type, level);
+    }
+
+    public BasketballProjectileEntity(Level level, LivingEntity shooter) {
+        super(ModEntities.BASKETBALL.get(), shooter, level);
+    }
+
+    public BasketballProjectileEntity(Level level, double x, double y, double z) {
+        super(ModEntities.BASKETBALL.get(), x, y, z, level);
+    }
+    /*
     public BasketballProjectileEntity(EntityType<? extends Snowball> entityType, Level level) {
         super(entityType, level);
+    }
+
+    public BasketballProjectileEntity(LivingEntity shooter, Level level) {
+        super(ModEntities.BASKETBALL.get(), shooter, level, new ItemStack(ModItems.BASKETBALL.get()), null);
     }
 
     public BasketballProjectileEntity(Level level, LivingEntity owner, ItemStack item) {
@@ -30,6 +46,7 @@ public class BasketballProjectileEntity extends ThrowableItemProjectile {
     public BasketballProjectileEntity(Level level, double x, double y, double z, ItemStack item) {
         super(EntityType.SNOWBALL, x, y, z, level, item);
     }
+    */
 
 
     /*
