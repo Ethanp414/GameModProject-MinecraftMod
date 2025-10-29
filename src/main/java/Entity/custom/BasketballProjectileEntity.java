@@ -1,7 +1,7 @@
 package Entity.custom;
 
-import dibs.bossfight.entity.ModEntities;
-import dibs.bossfight.item.ModItems;
+import Entity.ModEntities;
+import dibs.bossfight.ModItems;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

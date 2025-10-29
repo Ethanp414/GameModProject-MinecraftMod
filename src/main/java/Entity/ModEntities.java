@@ -45,11 +45,19 @@ public class ModEntities
                             .build(key);
                     });
 
+    public static final DeferredHolder<EntityType<?>, EntityType<BasketballProjectileEntity>> BASKETBALL = 
+            ENTITY_TYPES.register("basketball",
+                (Supplier<EntityType<BasketballProjectileEntity>>) () -> {
+                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "basketball");
+                    ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
 
-    // not working copy pasted like this, prob need to alter to fit the deferred register style above
-    public static final Supplier<EntityType<BasketballProjectileEntity>> BASKETBALL = ENTITY_TYPES.registerEntityType(
-    "basketball", BasketballProjectileEntity::new, MobCategory.MISC,
-    builder -> builder.sized(0.5f, 0.5f));
+                    return EntityType.Builder.<BasketballProjectileEntity>of(BasketballProjectileEntity::new, MobCategory.MISC)
+                        .sized(0.5f, 0.5f)
+                        .requiredFeatures(FeatureFlags.VANILLA)
+                        .build(key);
+                });
+
+
 
     public static void register(IEventBus eventBus)
     {
