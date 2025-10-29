@@ -14,7 +14,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 
 public class BasketballProjectileEntity extends AbstractArrow {
-    private float rotation;
     public Vec2 groundedOffset;
 
     public BasketballProjectileEntity(EntityType<? extends AbstractArrow> entityType, Level level) {
@@ -25,24 +24,19 @@ public class BasketballProjectileEntity extends AbstractArrow {
         super(ModEntities.BASKETBALL.get(), shooter, level, new ItemStack(ModItems.BASKETBALL.get()), null);
     }
 
+    /*
+   public Snowball(Level $$0, double $$1, double $$2, double $$3, ItemStack $$4) {
+      super(EntityType.SNOWBALL, $$1, $$2, $$3, $$0, $$4);
+   }
+   */
+
     @Override
     protected ItemStack getDefaultPickupItem() {
         return new ItemStack(ModItems.BASKETBALL.get());
     }
 
-    public float getRenderingRotation() {
-        rotation += 0.5f;
-        if(rotation >= 360) {
-            rotation = 0;
-        }
-        return rotation;
-    }
 
-    /*
-    public boolean isGrounded() {
-        return inGround;
-    }
-    */
+
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
@@ -56,6 +50,7 @@ public class BasketballProjectileEntity extends AbstractArrow {
         }
     }
 
+    /*
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
@@ -80,4 +75,5 @@ public class BasketballProjectileEntity extends AbstractArrow {
             groundedOffset = new Vec2(285f,180f);
         }
     }
+    */
 }
