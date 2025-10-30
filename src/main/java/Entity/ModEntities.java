@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import Entity.custom.DibsEntity;
 import Entity.custom.GeckoEntity;
-import Entity.custom.BasketballProjectileEntity;
+// import Entity.custom.BasketballProjectileEntity;
 import dibs.bossfight.DePaulDibsBossFight;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -45,17 +45,17 @@ public class ModEntities
                             .build(key);
                     });
 
-    public static final DeferredHolder<EntityType<?>, EntityType<BasketballProjectileEntity>> BASKETBALL = 
-            ENTITY_TYPES.register("basketball",
-                (Supplier<EntityType<BasketballProjectileEntity>>) () -> {
-                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "basketball");
-                    ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
+    // public static final DeferredHolder<EntityType<?>, EntityType<BasketballProjectileEntity>> BASKETBALL = 
+    //         ENTITY_TYPES.register("basketball",
+    //             (Supplier<EntityType<BasketballProjectileEntity>>) () -> {
+    //                 ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "basketball");
+    //                 ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
 
-                    return EntityType.Builder.<BasketballProjectileEntity>of(BasketballProjectileEntity::new, MobCategory.MISC)
-                        .sized(0.5f, 0.5f)
-                        .requiredFeatures(FeatureFlags.VANILLA)
-                        .build(key);
-                });
+    //                 return EntityType.Builder.<BasketballProjectileEntity>of(BasketballProjectileEntity::new, MobCategory.MISC)
+    //                     .sized(0.5f, 0.5f)
+    //                     .requiredFeatures(FeatureFlags.VANILLA)
+    //                     .build(key);
+    //             });
 
 
 
