@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import Entity.custom.DibsEntity;
 import Entity.custom.GeckoEntity;
-// import Entity.custom.BasketballProjectileEntity;
 import dibs.bossfight.DePaulDibsBossFight;
+import dibs.bossfight.entity.custom.SneepballProjectileEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -41,6 +41,18 @@ public class ModEntities
 
                         return EntityType.Builder.<DibsEntity>of(DibsEntity::new, MobCategory.MONSTER)
                             .sized(1, 4)
+                            .requiredFeatures(FeatureFlags.VANILLA)
+                            .build(key);
+                    });
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SneepballProjectileEntity>> SNEEPBALL = 
+                ENTITY_TYPES.register("sneepball",
+                    (Supplier<EntityType<SneepballProjectileEntity>>) () -> {
+                        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "sneepball");
+                        ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
+
+                        return EntityType.Builder.<SneepballProjectileEntity>of(SneepballProjectileEntity::new, MobCategory.MISC)
+                            .sized(0.5f, 0.5f)
                             .requiredFeatures(FeatureFlags.VANILLA)
                             .build(key);
                     });

@@ -24,6 +24,11 @@ public static final DeferredRegister.Items ITEMS =
             new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)
     );
 
+    public static final DeferredItem<Item> SNEEPBALL = ITEMS.registerSimpleItem(
+            "sneepball",
+            new Item.Properties().stacksTo(16).rarity(Rarity.EPIC)
+    );
+
 
 /*
     public static final DeferredItem<Item> BASKETBALL = ITEMS.registerItem(
