@@ -3,7 +3,6 @@ package Entity.client;
 import java.util.EnumSet;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -101,10 +100,10 @@ public class DibsCombatGoal extends Goal
 
     private void tryMeleeAttack()
     {
+        ((GeoEntity)dibsMob).triggerAnim("testing", "punchAnim");
         if(dibsMob.level() instanceof ServerLevel serverLevel)
         {
             dibsMob.doHurtTarget(serverLevel, target);
-            ((GeoEntity)dibsMob).triggerAnim("testing", "punchAnim");
         }
     }
 
@@ -124,6 +123,5 @@ public class DibsCombatGoal extends Goal
         sb.shoot(dx, dy + distance * 0.2, dz, velocity, inaccuracy);
 
         dibsMob.level().addFreshEntity(sb);
-        dibsMob.swing(InteractionHand.MAIN_HAND);
     }
 }
