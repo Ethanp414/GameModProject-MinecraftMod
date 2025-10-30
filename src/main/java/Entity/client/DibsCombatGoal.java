@@ -2,6 +2,7 @@ package Entity.client;
 
 import java.util.EnumSet;
 
+import Entity.custom.DibsEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.processing.AnimationController;
 
 public class DibsCombatGoal extends Goal
 {
@@ -20,14 +22,16 @@ public class DibsCombatGoal extends Goal
     private final double rangedRange;
     private final double moveSpeed;
     private int attackCooldown = 0;
+    private AnimationController dibsAnimController;
 
-    public DibsCombatGoal(Mob mob, double _meleeRange, double _rangedRange, double _moveSpeed)
+    public DibsCombatGoal(Mob mob, double _meleeRange, double _rangedRange, double _moveSpeed, AnimationController animController)
     { 
         dibsMob = mob;
         meleeRange = _meleeRange;
         rangedRange = _rangedRange;
         moveSpeed = _moveSpeed;
         setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.TARGET));
+        dibsAnimController = animController;
     }
 
     @Override
@@ -96,11 +100,21 @@ public class DibsCombatGoal extends Goal
             }
             attackCooldown = 1; // 20 ticks per second; attacks per second = 20/cooldown
         }
+        if(DibsEntity.GetAnimController().isPlayingTriggeredAnimation())
+        {
+            if(DibsEntity.GetAnimController().hasAnimationFinished())
+            {
+                DibsEntity.GetAnimController().transitionLength(20);
+            }
+        }
     }
 
     private void tryMeleeAttack()
     {
+        DibsEntity.GetAnimController().transitionLength(0);
         ((GeoEntity)dibsMob).triggerAnim("testing", "punchAnim");
+        //DibsEntity.GetAnimController().transitionLength(20);
+
         if(dibsMob.level() instanceof ServerLevel serverLevel)
         {
             dibsMob.doHurtTarget(serverLevel, target);
@@ -110,7 +124,7 @@ public class DibsCombatGoal extends Goal
     private void tryRangedAttack()
     {
         // Example using a Snowball projectile, can be swapped for custom projectiles
-        ItemStack sBall = new ItemStack(Items.FIRE_CHARGE);
+        ItemStack sBall = new ItemStack(Items.SNOWBALL);
         Snowball sb = new Snowball(dibsMob.level(), dibsMob, sBall);
         double dx = target.getX() - dibsMob.getX();
         double dy = (target.getY() + (double) target.getEyeHeight() - 1.1) - sb.getY();

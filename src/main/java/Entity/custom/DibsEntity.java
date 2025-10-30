@@ -34,6 +34,8 @@ public class DibsEntity extends Monster implements GeoEntity
 {
     //Animations
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
+    static AnimationController controller;
     protected static final RawAnimation walk_anim = RawAnimation.begin().thenLoop("walk");
     protected static final RawAnimation idle_anim = RawAnimation.begin().thenLoop("idol");
     protected static final RawAnimation punch_anim = RawAnimation.begin().then("punch", Animation.LoopType.PLAY_ONCE);
@@ -52,6 +54,7 @@ public class DibsEntity extends Monster implements GeoEntity
         super(entityType, level);
         bossEvent.setVisible(true);
         bossEvent.setDarkenScreen(true);
+        controller = new AnimationController<>("testing", 20, this::testAnimController);
         //bossEvent.setCreateWorldFog(true);
     }
 
@@ -69,7 +72,7 @@ public class DibsEntity extends Monster implements GeoEntity
     @Override
     protected void registerGoals() 
     {
-        this.goalSelector.addGoal(1, new DibsCombatGoal(this, 2.5, 15, 1));
+        this.goalSelector.addGoal(1, new DibsCombatGoal(this, 2.5, 15, 1, controller));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
@@ -180,10 +183,15 @@ public class DibsEntity extends Monster implements GeoEntity
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         //empty for now no animations
-        AnimationController controller = new AnimationController<>("testing", 1, this::testAnimController);   
+        //controller = new AnimationController<>("testing", 20, this::testAnimController);   
         controllers.add(controller);  
         
         controller.triggerableAnim("punchAnim", punch_anim);
+    }
+
+    public static AnimationController GetAnimController()
+    {
+        return controller;
     }
 
     @Override
