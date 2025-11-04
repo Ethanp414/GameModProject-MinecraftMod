@@ -24,8 +24,9 @@ public static final DeferredRegister.Items ITEMS =
             new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)
     );
 
-    public static final DeferredItem<Item> SNEEPBALL = ITEMS.registerSimpleItem(
+    public static final DeferredItem<Item> SNEEPBALL = ITEMS.registerItem(
             "sneepball",
+            properties -> new dibs.bossfight.item.custom.SneepballItem(properties),
             new Item.Properties().stacksTo(16).rarity(Rarity.EPIC)
     );
 
