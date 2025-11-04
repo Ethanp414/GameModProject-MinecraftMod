@@ -11,5 +11,12 @@
   "depauldibsbossfight.configuration.logDirtBlock": "Log Dirt Block",
   "depauldibsbossfight.configuration.magicNumberIntroduction": "Magic Number Text",
   "depauldibsbossfight.configuration.magicNumber": "Magic Number",
-  "entity.depauldibsbossfight.dibs": "Dibs"
+  "entity.depauldibsbossfight.dibs": "Dibs",
+
+  "subtitle.depauldibsbossfight.dibs.mumble": "Dibs mutters",
+  "subtitle.depauldibsbossfight.dibs.hurt": "Dibs hurt",
+  "subtitle.depauldibsbossfight.dibs.death": "Dibs death cry"
+
+
+
 }
