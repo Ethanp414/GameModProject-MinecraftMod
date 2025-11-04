@@ -1,5 +1,6 @@
 package dibs.bossfight.entity.custom;
 
+import Entity.custom.DibsEntity;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -7,7 +8,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -52,9 +52,10 @@ public class SneepballProjectileEntity extends ThrowableItemProjectile {
    @Override
    protected void onHitEntity(EntityHitResult $$0) {
       super.onHitEntity($$0);
-      Entity $$1 = $$0.getEntity();
-      int $$2 = $$1 instanceof Blaze ? 3 : 0;
-      $$1.hurt(this.damageSources().thrown(this, this.getOwner()), (float)$$2);
+      Entity entity = $$0.getEntity();
+      //int $$2 = entity instanceof Blaze ? 3 : 0;
+      float dmgAmount = entity instanceof DibsEntity ? 10 : 3.25f;
+      entity.hurt(this.damageSources().thrown(this, this.getOwner()), (float)dmgAmount);
    }
 
    @Override
