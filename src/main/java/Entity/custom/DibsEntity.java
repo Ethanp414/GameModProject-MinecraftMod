@@ -30,6 +30,10 @@ import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.entity.player.Player;
 
+import dibs.bossfight.ModSounds;
+import net.minecraft.sounds.SoundEvent;     //Added by Evan
+import net.minecraft.sounds.SoundSource;
+
 public class DibsEntity extends Monster implements GeoEntity
 {
     //Animations
@@ -198,4 +202,28 @@ public class DibsEntity extends Monster implements GeoEntity
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
     }
+
+    @Override
+protected SoundEvent getAmbientSound() {
+    // Idle mumbling while roaming/idle
+    return ModSounds.DIBS_MUMBLE.get();
+}
+
+@Override
+protected SoundEvent getHurtSound(DamageSource source) {
+    // Will randomly pick from hurt1/2/3 as defined in sounds.json
+    return ModSounds.DIBS_HURT.get();
+}
+
+@Override
+protected SoundEvent getDeathSound() {
+    return ModSounds.DIBS_DEATH.get();
+}
+
+@Override
+public SoundSource getSoundSource() {
+    // Uses the Hostile Creatures volume slider
+    return SoundSource.HOSTILE;
+}
+
 }

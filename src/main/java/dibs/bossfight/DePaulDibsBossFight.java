@@ -58,6 +58,7 @@ public class DePaulDibsBossFight {
             output.accept(ModItems.CHICAGO_DOG.get());
         })
         .build());
+
     // Remove this line entirely, or:
 public static final String MODID = MOD_ID; // keep only if you really want both names
 
@@ -83,6 +84,9 @@ public DePaulDibsBossFight(IEventBus modEventBus, ModContainer modContainer) {
     {
         ClientEventHandler.init(modEventBus);
     }
+
+ModSounds.SOUND_EVENTS.register(modEventBus);
+
 }
 
 

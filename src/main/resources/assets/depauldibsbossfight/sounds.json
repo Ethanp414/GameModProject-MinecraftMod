@@ -1,0 +1,25 @@
+{
+  "entity/dibs/mumble": {
+    "subtitle": "subtitle.depauldibsbossfight.dibs.mumble",
+    "sounds": [
+      "depauldibsbossfight:entity/dibs/mumble1",
+      "depauldibsbossfight:entity/dibs/mumble2",
+      "depauldibsbossfight:entity/dibs/mumble3"
+    ]
+  },
+  "entity/dibs/hurt": {
+    "subtitle": "subtitle.depauldibsbossfight.dibs.hurt",
+    "sounds": [
+      { "name": "depauldibsbossfight:entity/dibs/hurt1", "weight": 2 },
+      { "name": "depauldibsbossfight:entity/dibs/hurt2", "weight": 2 },
+      { "name": "depauldibsbossfight:entity/dibs/hurt3", "weight": 1 },
+      { "name": "depauldibsbossfight:entity/dibs/hurt4", "weight": 1 }
+    ]
+  },
+  "entity/dibs/death": {
+    "subtitle": "subtitle.depauldibsbossfight.dibs.death",
+    "sounds": [
+      "depauldibsbossfight:entity/dibs/death1"
+    ]
+  }
+}
