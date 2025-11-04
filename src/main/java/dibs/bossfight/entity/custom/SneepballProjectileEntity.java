@@ -54,7 +54,7 @@ public class SneepballProjectileEntity extends ThrowableItemProjectile {
       super.onHitEntity($$0);
       Entity entity = $$0.getEntity();
       //int $$2 = entity instanceof Blaze ? 3 : 0;
-      float dmgAmount = entity instanceof DibsEntity ? 10 : 3.25f;
+      float dmgAmount = entity instanceof DibsEntity ? 12 : 1.75f;
       entity.hurt(this.damageSources().thrown(this, this.getOwner()), (float)dmgAmount);
    }
 
