@@ -74,6 +74,8 @@ public class SneepballProjectileEntity extends ThrowableItemProjectile {
 */
 
 
+   // use fast inverse square root to calculate bounce physics more quickly? need to look that shit up again lol
+
    @Override
    protected void onHitBlock(BlockHitResult $$0) {
       super.onHitBlock($$0);
