@@ -96,7 +96,7 @@ public class DibsCombatGoal extends Goal
             } 
             else if (inRanged) 
             {
-                tryRangedAttack();
+                //tryRangedAttack();
             }
             attackCooldown = 1; // 20 ticks per second; attacks per second = 20/cooldown
         }
