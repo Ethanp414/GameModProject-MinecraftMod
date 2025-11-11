@@ -22,6 +22,7 @@ public class DibsCombatGoal extends Goal
     private final double rangedRange;
     private final double moveSpeed;
     private int attackCooldown = 0;
+    private int pathRecompCooldown = 10;
     private AnimationController dibsAnimController;
 
     public DibsCombatGoal(Mob mob, double _meleeRange, double _rangedRange, double _moveSpeed, AnimationController animController)
@@ -68,21 +69,19 @@ public class DibsCombatGoal extends Goal
         if (target == null || !target.isAlive()) return;
 
         //look at target
-        dibsMob.getLookControl().setLookAt(target, 30.0F, 30.0F);
+        //dibsMob.getLookControl().setLookAt(target, 30.0F, 30.0F);  // <---------------useless
 
         double distSq = dibsMob.distanceToSqr(target);
         boolean inMelee = distSq <= meleeRange * meleeRange;
         boolean inRanged = distSq <= rangedRange * rangedRange;
 
         // Approach target if out of melee range
-        if (!inMelee) 
+        if (!inMelee && pathRecompCooldown == 0) 
         {
             dibsMob.getNavigation().moveTo(target, moveSpeed);
+            pathRecompCooldown = 10;
         } 
-        else 
-        {
-            dibsMob.getNavigation().stop();
-        }
+        pathRecompCooldown--;
 
         if (attackCooldown > 0)
         {

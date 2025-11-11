@@ -75,7 +75,7 @@ public class DibsEntity extends Monster implements GeoEntity
     {
         this.goalSelector.addGoal(1, new DibsCombatGoal(this, 2.5, 15, 1, controller));
 
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false));
     }
 
     public static AttributeSupplier.Builder createAttributes()
@@ -165,7 +165,6 @@ public class DibsEntity extends Monster implements GeoEntity
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        //empty for now no animations
         //controller = new AnimationController<>("testing", 20, this::testAnimController);   
         controllers.add(controller);  
         
