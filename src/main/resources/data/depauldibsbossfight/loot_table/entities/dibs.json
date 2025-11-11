@@ -8,7 +8,7 @@
     "pools": 
     [ 
         {
-            "rolls": 1,
+            "rolls": 32,
             "bonus_rolls": 0,
             "name": "dibslootpool1",
             "conditions": 
@@ -16,7 +16,7 @@
             ],
             "functions": 
             [
-                {"function": "minecraft:set_count", "count": 32}
+                {"function": "minecraft:set_count", "count": 1}
             ],
             "entries": 
             [
@@ -25,6 +25,27 @@
                     "name": "depauldibsbossfight:chicago_dog", 
                     "weight": 3, 
                     "quality": 1, 
+                    "conditions": [],
+                    "functions": []
+                }
+            ]
+        },
+        {
+            "rolls": 32,
+            "bonus_rolls": 0,
+            "name": "dibslootpool2",
+            "conditions":[],
+            "fuctions":
+            [
+                {"function": "minecraft:set_count", "count": 1}
+            ],
+            "entries":
+            [
+                {
+                    "type": "minecraft:item",
+                    "name": "depauldibsbossfight:basketball",
+                    "weight": 3,
+                    "quality": 1,
                     "conditions": [],
                     "functions": []
                 }
