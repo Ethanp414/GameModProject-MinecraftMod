@@ -50,6 +50,27 @@
                     "functions": []
                 }
             ]
+        },
+                {
+            "rolls": 32,
+            "bonus_rolls": 0,
+            "name": "dibslootpool3",
+            "conditions":[],
+            "fuctions":
+            [
+                {"function": "minecraft:set_count", "count": 1}
+            ],
+            "entries":
+            [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:emerald",
+                    "weight": 3,
+                    "quality": 1,
+                    "conditions": [],
+                    "functions": []
+                }
+            ]
         }
     ]
 }
