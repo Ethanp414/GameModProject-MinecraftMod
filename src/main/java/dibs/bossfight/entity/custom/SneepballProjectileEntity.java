@@ -76,6 +76,58 @@ public class SneepballProjectileEntity extends ThrowableItemProjectile {
 
    // use fast inverse square root to calculate bounce physics more quickly? need to look that shit up again lol
 
+   // onHitBlock, sneepball bounces off surfaces
+
+   @Override
+   protected void onHitBlock(BlockHitResult result) {
+      super.onHitBlock(result);
+      Direction direction = result.getDirection();
+      Vec3 motion = this.getDeltaMovement();
+
+      // Bounce logic: invert and dampen velocity based on hit face
+      double bounceFactor = 0.45;
+      double retainFactor = 0.65;
+      double x = motion.x;
+      double y = motion.y;
+      double z = motion.z;
+
+      if (motion.length() < 0.1) {
+         this.discard();
+         }
+
+      switch (direction) {
+         case EAST:
+         case WEST:
+            x = -x * bounceFactor;
+            y = y * retainFactor;
+            z = z * retainFactor;
+            break;
+         case NORTH:
+         case SOUTH:
+            x = x * retainFactor;
+            y = y * retainFactor;
+            z = -z * bounceFactor;
+            break;
+         case UP:
+         case DOWN:
+            x = x * retainFactor;
+            y = -y * bounceFactor;
+            z = z * retainFactor;
+            break;
+         default:
+            break;
+
+
+      }
+
+      this.setDeltaMovement(x, y, z);
+
+      // Play bounce sound
+      this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+            SoundEvents.SLIME_BLOCK_STEP, SoundSource.NEUTRAL, 0.5f, 1.0f);
+   }
+
+/*
    @Override
    protected void onHitBlock(BlockHitResult $$0) {
       super.onHitBlock($$0);
@@ -94,40 +146,9 @@ public class SneepballProjectileEntity extends ThrowableItemProjectile {
       this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
             SoundEvents.SLIME_BLOCK_STEP, SoundSource.NEUTRAL, 0.5f, 1.0f);
    }
+*/
 
 /*
-    @Override
-    protected void onHitBlock(BlockHitResult result) {
-        super.onHitBlock(result);
-        if (!this.level().isClientSide) {
-            Vec3 motion = this.getDeltaMovement();
-            Direction dir = result.getDirection();
-
-            Vec3 normal = new Vec3(dir.getStepX(), dir.getStepY(), dir.getStepZ());
-            
-            // Reflect the motion vector off the surface (with energy loss)
-            double bounceFactor = 0.55; // 55% energy retention
-            Vec3 reflection = motion.subtract(normal.scale(2.0D * motion.dot(normal))).scale(bounceFactor);
-            
-            // Only bounce if moving fast enough, otherwise come to rest
-            if (reflection.length() > 0.1) {
-                this.setDeltaMovement(reflection);
-                // Play bounce sound
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                        SoundEvents.SLIME_BLOCK_HIT,
-                        SoundSource.NEUTRAL,
-                        1.0F, 1.2F);
-            } else {
-                this.discard(); // Remove if basically stopped
-                // Drop as item
-                // Drop a new basketball item
-                net.minecraft.world.entity.item.ItemEntity itemEntity = new net.minecraft.world.entity.item.ItemEntity(
-                    this.level(), this.getX(), this.getY(), this.getZ(),
-                    new ItemStack(this.getDefaultItem()));
-                this.level().addFreshEntity(itemEntity);
-            }
-        }
-    }
 
     @Override
     public void tick() {
