@@ -56,8 +56,7 @@ public class DePaulDibsBossFight {
         .icon(() -> ModItems.CHICAGO_DOG.get().getDefaultInstance())
         .displayItems((parameters, output) -> {
             output.accept(ModItems.CHICAGO_DOG.get());
-            //output.accept(ModItems.BASKETBALL.get());
-            output.accept(ModItems.SNEEPBALL.get());
+            output.accept(ModItems.BASKETBALL.get());
         })
         .build());
     // Remove this line entirely, or:

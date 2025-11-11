@@ -19,15 +19,11 @@ public static final DeferredRegister.Items ITEMS =
                     .saturationModifier(0.8f)
                     .build()));
 
-    public static final DeferredItem<Item> BASKETBALL = ITEMS.registerSimpleItem(
-            "basketball",
-            new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)
-    );
 
-    public static final DeferredItem<Item> SNEEPBALL = ITEMS.registerItem(
-            "sneepball",
-            properties -> new dibs.bossfight.item.custom.SneepballItem(properties),
-            new Item.Properties().stacksTo(16).rarity(Rarity.EPIC)
+    public static final DeferredItem<Item> BASKETBALL = ITEMS.registerItem(
+            "basketball",
+            properties -> new dibs.bossfight.item.custom.BasketballItem(properties),
+            new Item.Properties().stacksTo(16).rarity(Rarity.RARE)
     );
 
 

@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import Entity.custom.DibsEntity;
 import Entity.custom.GeckoEntity;
 import dibs.bossfight.DePaulDibsBossFight;
-import dibs.bossfight.entity.custom.SneepballProjectileEntity;
+import dibs.bossfight.entity.custom.BasketballProjectileEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -45,13 +45,13 @@ public class ModEntities
                             .build(key);
                     });
 
-    public static final DeferredHolder<EntityType<?>, EntityType<SneepballProjectileEntity>> SNEEPBALL = 
-                ENTITY_TYPES.register("sneepball",
-                    (Supplier<EntityType<SneepballProjectileEntity>>) () -> {
-                        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "sneepball");
+    public static final DeferredHolder<EntityType<?>, EntityType<BasketballProjectileEntity>> BASKETBALL = 
+                ENTITY_TYPES.register("basketball",
+                    (Supplier<EntityType<BasketballProjectileEntity>>) () -> {
+                        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DePaulDibsBossFight.MODID, "basketball");
                         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);
 
-                        return EntityType.Builder.<SneepballProjectileEntity>of(SneepballProjectileEntity::new, MobCategory.MISC)
+                        return EntityType.Builder.<BasketballProjectileEntity>of(BasketballProjectileEntity::new, MobCategory.MISC)
                             .sized(0.5f, 0.5f)
                             .requiredFeatures(FeatureFlags.VANILLA)
                             .build(key);
