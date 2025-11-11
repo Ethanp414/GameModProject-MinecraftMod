@@ -1,12 +1,10 @@
 package dibs.bossfight.entity.custom;
 
 import Entity.custom.DibsEntity;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,9 +13,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.HitResult;
 
 public class BasketballProjectileEntity extends ThrowableItemProjectile {
    public BasketballProjectileEntity(EntityType<? extends BasketballProjectileEntity> $$0, Level $$1) {
@@ -62,109 +59,19 @@ public class BasketballProjectileEntity extends ThrowableItemProjectile {
       entity.hurt(this.damageSources().thrown(this, this.getOwner()), dmgAmount);
    }
 
-/*
+
    @Override
    protected void onHit(HitResult $$0) {
       super.onHit($$0);
+
+      this.playSound(SoundEvents.BUBBLE_POP);
+
       if (!this.level().isClientSide()) {
          this.level().broadcastEntityEvent(this, (byte)3);
          this.discard();
       }
    }
-*/
 
-
-   // use fast inverse square root to calculate bounce physics more quickly? need to look that shit up again lol
-
-   // onHitBlock, sneepball bounces off surfaces
-
-   @Override
-   protected void onHitBlock(BlockHitResult result) {
-      super.onHitBlock(result);
-      Direction direction = result.getDirection();
-      Vec3 motion = this.getDeltaMovement();
-
-      // Bounce logic: invert and dampen velocity based on hit face
-      double bounceFactor = 0.45;
-      double retainFactor = 0.65;
-      double x = motion.x;
-      double y = motion.y;
-      double z = motion.z;
-
-      if (motion.length() < 0.1) {
-         this.discard();
-         }
-
-      switch (direction) {
-         case EAST:
-         case WEST:
-            x = -x * bounceFactor;
-            y = y * retainFactor;
-            z = z * retainFactor;
-            break;
-         case NORTH:
-         case SOUTH:
-            x = x * retainFactor;
-            y = y * retainFactor;
-            z = -z * bounceFactor;
-            break;
-         case UP:
-         case DOWN:
-            x = x * retainFactor;
-            y = -y * bounceFactor;
-            z = z * retainFactor;
-            break;
-         default:
-            break;
-
-
-      }
-
-      this.setDeltaMovement(x, y, z);
-
-      // Play bounce sound
-      this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-            SoundEvents.SLIME_BLOCK_STEP, SoundSource.NEUTRAL, 0.5f, 1.0f);
-   }
-
-/*
-   @Override
-   protected void onHitBlock(BlockHitResult $$0) {
-      super.onHitBlock($$0);
-      Direction direction = $$0.getDirection();
-      Vec3 motion = this.getDeltaMovement();
-
-      if (direction == Direction.EAST || direction == Direction.WEST) {
-         this.setDeltaMovement(-motion.x * 0.7, motion.y * 0.9, motion.z * 0.9);
-      } else if (direction == Direction.NORTH || direction == Direction.SOUTH) {
-         this.setDeltaMovement(motion.x * 0.9, motion.y * 0.9, -motion.z * 0.7);
-      } else if (direction == Direction.UP || direction == Direction.DOWN) {
-         this.setDeltaMovement(motion.x * 0.9, -motion.y * 0.7, motion.z * 0.9);
-      }
-
-      // Play bounce sound
-      this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-            SoundEvents.SLIME_BLOCK_STEP, SoundSource.NEUTRAL, 0.5f, 1.0f);
-   }
-*/
-
-/*
-
-    @Override
-    public void tick() {
-        super.tick();
-        
-        // Add drag/air resistance
-        Vec3 motion = this.getDeltaMovement();
-        double drag = 0.97; // Slight air resistance
-        this.setDeltaMovement(motion.scale(drag));
-        
-        // Despawn after 15 seconds
-        if (!this.level().isClientSide && this.tickCount > 300) {
-            this.discard();
-        }
-    }
-*/
 
 
 }
