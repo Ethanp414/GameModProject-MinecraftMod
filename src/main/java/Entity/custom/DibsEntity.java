@@ -51,7 +51,6 @@ public class DibsEntity extends Monster implements GeoEntity
             BossEvent.BossBarOverlay.PROGRESS); 
 
     public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimemout = 0;
 
     public DibsEntity(EntityType<? extends Monster> entityType, Level level) 
     {
@@ -71,8 +70,6 @@ public class DibsEntity extends Monster implements GeoEntity
         bossEvent.setCreateWorldFog(true);
     }
 
-    
-
     @Override
     protected void registerGoals() 
     {
@@ -91,28 +88,10 @@ public class DibsEntity extends Monster implements GeoEntity
         .add(Attributes.KNOCKBACK_RESISTANCE, 1d);
     }
 
-    private void setupAnimationStates()
-    {
-        if(this.idleAnimationTimemout <= 0)
-        {
-            this.idleAnimationTimemout = 80;
-            this.idleAnimationState.start(this.tickCount);
-        }
-        else
-        {
-            --this.idleAnimationTimemout;
-        }
-    }
-
     @Override
     public void tick() 
     {
         super.tick();
-
-        if(this.level().isClientSide())
-        {
-            this.setupAnimationStates();
-        }
 
         if (!level().isClientSide) {
             float progress = this.getHealth() / this.getMaxHealth();
