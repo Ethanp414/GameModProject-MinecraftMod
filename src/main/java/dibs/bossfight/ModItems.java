@@ -2,6 +2,7 @@ package dibs.bossfight;
 
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -17,6 +18,22 @@ public static final DeferredRegister.Items ITEMS =
                     .nutrition(7)
                     .saturationModifier(0.8f)
                     .build()));
+
+
+    public static final DeferredItem<Item> BASKETBALL = ITEMS.registerItem(
+            "basketball",
+            properties -> new dibs.bossfight.item.custom.BasketballItem(properties),
+            new Item.Properties().stacksTo(16).rarity(Rarity.RARE)
+    );
+
+
+/*
+    public static final DeferredItem<Item> BASKETBALL = ITEMS.registerItem(
+            "basketball",
+            properties -> new dibs.bossfight.item.custom.BasketballItem(properties.stacksTo(16)),
+            new Item.Properties()
+    );
+*/
 
      public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
