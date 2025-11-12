@@ -70,13 +70,16 @@ public class BasketballProjectileEntity extends ThrowableItemProjectile {
       this.playSound(SoundEvents.BUBBLE_POP);
 
       float randomFloat = (float)Math.random();
-      if (randomFloat < 0.65f) {
+      if (randomFloat < 0.7f) {
        this.explosionPower = 1;
-      } else if (randomFloat < 0.95f) {
+      } else if (randomFloat < 0.99f) {
        this.explosionPower = 2;
-      } else {
+      } else if (randomFloat < 0.999f){
        this.explosionPower = 8;
+      } else {
+       this.explosionPower = 16;
       }
+
       this.level().explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionPower, true, Level.ExplosionInteraction.MOB);
 
       if (!this.level().isClientSide()) {
