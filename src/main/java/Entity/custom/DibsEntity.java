@@ -67,7 +67,8 @@ public class DibsEntity extends Monster implements GeoEntity
         this.setPos(x, y, z);
         bossEvent.setVisible(true);
         bossEvent.setDarkenScreen(true);
-        bossEvent.setCreateWorldFog(true);
+        //bossEvent.setCreateWorldFog(true);
+        controller = new AnimationController<>("testing", 20, this::testAnimController);
     }
 
     @Override
@@ -81,10 +82,10 @@ public class DibsEntity extends Monster implements GeoEntity
     public static AttributeSupplier.Builder createAttributes()
     {
         return Animal.createLivingAttributes()
-        .add(Attributes.MAX_HEALTH, 10d) 
+        .add(Attributes.MAX_HEALTH, 400d) 
         .add(Attributes.MOVEMENT_SPEED, 0.25d)
         .add(Attributes.FOLLOW_RANGE, 24d)
-        .add(Attributes.ATTACK_DAMAGE, 1d)
+        .add(Attributes.ATTACK_DAMAGE, 5d)
         .add(Attributes.KNOCKBACK_RESISTANCE, 1d);
     }
 
