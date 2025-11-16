@@ -1,0 +1,29 @@
+--------------------------------------------------------------------------------
+
+Command-Line:
+ - C:\Users\ethan\.vscode\extensions\redhat.java-1.47.0-win32-x64\jre\21.0.8-win32-x86_64\bin\java.exe
+ - -jar
+ - C:\Users\ethan\.gradle\caches\modules-2\files-2.1\io.codechicken\DiffPatch\2.0.0.36\5b32f9baa0c0371c0dc80a3b88794960af0c6b44\DiffPatch-2.0.0.36-all.jar
+ - C:\Users\ethan\.gradle\caches\neoformruntime\intermediate_results\inject_2a827c5cfe4abbba9f22b6ba1c4fc2c9cb5f6bd5_output.jar
+ - C:\Users\ethan\.gradle\caches\modules-2\files-2.1\net.neoforged\neoform\1.21.8-20250717.133445\1b2bb7418b0ccf190086a28c8b78f94acca7e1b1\neoform-1.21.8-20250717.133445.zip
+ - --prefix
+ - patches/joined/
+ - --patch
+ - --archive
+ - ZIP
+ - --output
+ - ./output.zip
+ - --log-level
+ - WARN
+ - --mode
+ - OFFSET
+ - --archive-rejects
+ - ZIP
+ - --reject
+ - ./outputRejects.zip
+ - --base-path-prefix
+ - a/
+ - --modified-path-prefix
+ - b/
+--------------------------------------------------------------------------------
+

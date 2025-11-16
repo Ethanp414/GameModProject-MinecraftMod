@@ -82,7 +82,7 @@ public class DibsEntity extends Monster implements GeoEntity
     public static AttributeSupplier.Builder createAttributes()
     {
         return Animal.createLivingAttributes()
-        .add(Attributes.MAX_HEALTH, 400d) 
+        .add(Attributes.MAX_HEALTH, 4d) //400
         .add(Attributes.MOVEMENT_SPEED, 0.25d)
         .add(Attributes.FOLLOW_RANGE, 24d)
         .add(Attributes.ATTACK_DAMAGE, 5d)
