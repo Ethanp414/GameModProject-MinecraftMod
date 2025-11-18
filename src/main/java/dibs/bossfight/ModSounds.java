@@ -8,9 +8,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
  * Registers all sound events for the mod.
- *
- * Note: ResourceLocation(String,String) ctor is not public in modern MC,
- * so we use ResourceLocation.fromNamespaceAndPath(modid, path).
  */
 public final class ModSounds {
 
@@ -45,7 +42,7 @@ public final class ModSounds {
     // Dibs SFX
     // ------------------------
 
-    // One event mapped to 4 files in sounds.json (hurt1..4) ??MC picks randomly
+    // One event mapped to 4 files in sounds.json (hurt1..4)
     public static final DeferredHolder<SoundEvent, SoundEvent> DIBS_HURT =
             SOUND_EVENTS.register("entity_dibs_hurt", () ->
                     SoundEvent.createVariableRangeEvent(
@@ -82,4 +79,3 @@ public final class ModSounds {
                             ResourceLocation.fromNamespaceAndPath(
                                     DePaulDibsBossFight.MOD_ID, "entity/dibs/death")));
 }
-

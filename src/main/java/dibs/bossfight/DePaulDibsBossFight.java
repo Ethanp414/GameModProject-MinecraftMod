@@ -7,6 +7,8 @@ import com.mojang.logging.LogUtils;
 import Entity.ModEntities;
 import Entity.client.ClientEventHandler;
 import Entity.client.ModCommonEvents;
+import dibs.bossfight.clients.ClientTicks;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -37,6 +39,7 @@ public class DePaulDibsBossFight {
     public static final String MOD_ID = "depauldibsbossfight";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+
     // Registers
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
@@ -65,14 +68,19 @@ public static final String MODID = MOD_ID; // keep only if you really want both 
 
 
 public DePaulDibsBossFight(IEventBus modEventBus, ModContainer modContainer) {
-    // 1) Registries FIRST
+    // 1) Registries
     ModItems.register(modEventBus);
     BLOCKS.register(modEventBus);
     CREATIVE_MODE_TABS.register(modEventBus);
 
-    // 2) Listeners on the MOD bus
+    // 2) Mod bus listeners
     modEventBus.addListener(this::commonSetup);
     modEventBus.addListener(this::addCreative);
+
+    // --- CLIENT EVENT REGISTRATION ---
+    if (FMLEnvironment.dist == Dist.CLIENT) {
+        ClientEventHandler.init(modEventBus);
+    }
 
     // 3) Global bus + config
     NeoForge.EVENT_BUS.register(this);
@@ -81,14 +89,9 @@ public DePaulDibsBossFight(IEventBus modEventBus, ModContainer modContainer) {
     ModEntities.register(modEventBus);
     modEventBus.addListener(ModCommonEvents::onAttributes);
 
-    if (FMLEnvironment.dist == Dist.CLIENT) 
-    {
-        ClientEventHandler.init(modEventBus);
-    }
-
-ModSounds.SOUND_EVENTS.register(modEventBus);
-
+    ModSounds.SOUND_EVENTS.register(modEventBus);
 }
+
 
 
 

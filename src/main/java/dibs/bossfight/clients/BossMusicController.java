@@ -2,58 +2,118 @@ package dibs.bossfight.clients;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.util.RandomSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 
-import Entity.custom.DibsEntity;          // your project’s entity package
-import dibs.bossfight.ModSounds;         // must expose BOSSFIGHT1 (bossdefeat1 is handled elsewhere)
+import Entity.custom.DibsEntity;
+import dibs.bossfight.ModSounds;
 
-/**
- * Minimal controller to start bossfight1 when Dibs aggroes the player.
- * We intentionally ignore bossfight2 for now (per your request).
- */
-public class BossMusicController {
+public final class BossMusicController {
 
-    private static final RandomSource RNG = RandomSource.create();
+    private static int lastFightDibsId = -1;
 
-    // simple state so bossfight1 only plays once per “fight”
-    private static boolean fightStarted = false;
+    private static boolean defeatMusicPlaying = false;
+    private static BlockPos defeatPos = null;
 
-    /**
-     * Called every client tick (see ClientTicks below).
-     */
+    private BossMusicController() {}
+
     public static void clientTick() {
+
         Minecraft mc = Minecraft.getInstance();
         if (mc == null || mc.level == null) return;
+
         Player player = mc.player;
         if (player == null) return;
 
-        // Look for ANY Dibs within ~48 blocks
-        DibsEntity dibs = player.level().getEntitiesOfClass(
+        // ============================================================
+        // 1. STOP DEFEAT MUSIC IF PLAYER TOO FAR
+        // ============================================================
+        if (defeatMusicPlaying && defeatPos != null) {
+
+            double dist = player.blockPosition().distSqr(defeatPos);
+
+            if (dist > (30 * 30)) {
+                mc.getSoundManager().stop();   // Stop all sounds
+                defeatMusicPlaying = false;
+                defeatPos = null;
+                System.out.println("[BOSS MUSIC] Stopped defeat music due to distance");
+            }
+        }
+
+        // ============================================================
+        // 2. FIND DIBS
+        // ============================================================
+        DibsEntity dibs = mc.level.getEntitiesOfClass(
                 DibsEntity.class,
                 player.getBoundingBox().inflate(48.0D)
         ).stream().findFirst().orElse(null);
 
-        if (dibs == null) {
-            // No boss around — allow next encounter to play intro again.
-            fightStarted = false;
+        if (dibs == null || !dibs.isAlive()) {
+            lastFightDibsId = -1;
             return;
         }
 
-        // "Aggroed" = boss target is this player
-        boolean aggroOnPlayer = dibs.getTarget() != null && dibs.getTarget() == player;
+        // ============================================================
+        // 3. CHECK AGGRO PLAYER TARGET
+        // ============================================================
+        int targetId = dibs.getSyncedTargetId();
+        Entity raw = mc.level.getEntity(targetId);
+        Player actualTarget = raw instanceof Player p ? p : null;
 
-        if (aggroOnPlayer && !fightStarted) {
-            fightStarted = true;
-            playIntroOnce();
+        boolean aggroOnPlayer =
+            actualTarget != null &&
+            actualTarget.getUUID().equals(player.getUUID());
+
+        // ============================================================
+        // 4. TRIGGER BOSSFIGHT1 MUSIC (only once)
+        // ============================================================
+        if (aggroOnPlayer && dibs.isAggroed()) {
+            if (lastFightDibsId != dibs.getId()) {
+                lastFightDibsId = dibs.getId();
+                playBossfight1();
+            }
+        }
+
+        // ============================================================
+        // 5. IF DIBS IS DEAD, PLAY BOSSDEFEAT1
+        // ============================================================
+        if (dibs.isDeadOrDying()) {
+
+            if (!defeatMusicPlaying) {
+
+                defeatPos = dibs.getDeathPos();
+                playBossDefeat();
+
+                defeatMusicPlaying = true;
+            }
         }
     }
 
-    private static void playIntroOnce() {
-        var ev = ModSounds.BOSSFIGHT1.get();
-        if (ev != null) {
-            Minecraft.getInstance().getSoundManager()
-                    .play(SimpleSoundInstance.forMusic(ev, 1.0f));
-        }
+
+    // ============================================================
+    //            AUDIO FUNCTIONS
+    // ============================================================
+    private static void playBossfight1() {
+        Minecraft mc = Minecraft.getInstance();
+        mc.getMusicManager().stopPlaying();
+
+        SimpleSoundInstance s =
+                SimpleSoundInstance.forMusic(ModSounds.BOSSFIGHT1.get(), 0);
+
+        mc.getSoundManager().play(s);
+        System.out.println("[BOSS MUSIC] Played bossfight1 intro");
+    }
+
+    private static void playBossDefeat() {
+        Minecraft mc = Minecraft.getInstance();
+        mc.getMusicManager().stopPlaying();
+
+        SimpleSoundInstance s =
+                SimpleSoundInstance.forMusic(ModSounds.BOSSDEFEAT1.get(), 0);
+
+        mc.getSoundManager().play(s);
+        System.out.println("[BOSS MUSIC] Played bossdefeat1");
     }
 }

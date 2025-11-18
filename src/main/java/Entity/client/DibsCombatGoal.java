@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import Entity.custom.DibsEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
@@ -13,9 +12,9 @@ import net.minecraft.world.item.Items;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.processing.AnimationController;
 
-public class DibsCombatGoal extends Goal
-{
-    private final Mob dibsMob;
+public class DibsCombatGoal extends Goal {
+
+    private final DibsEntity dibsMob;
     private LivingEntity target;
 
     private final double meleeRange;
@@ -23,106 +22,93 @@ public class DibsCombatGoal extends Goal
     private final double moveSpeed;
     private int attackCooldown = 0;
     private int pathRecompCooldown = 10;
-    private AnimationController dibsAnimController;
+    public DibsCombatGoal(DibsEntity mob,
+                          double _meleeRange,
+                          double _rangedRange,
+                          double _moveSpeed,
+                          AnimationController<DibsEntity> animController) {
 
-    public DibsCombatGoal(Mob mob, double _meleeRange, double _rangedRange, double _moveSpeed, AnimationController animController)
-    { 
-        dibsMob = mob;
-        meleeRange = _meleeRange;
-        rangedRange = _rangedRange;
-        moveSpeed = _moveSpeed;
-        setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.TARGET));
-        dibsAnimController = animController;
+        this.dibsMob = mob;
+        this.meleeRange = _meleeRange;
+        this.rangedRange = _rangedRange;
+        this.moveSpeed = _moveSpeed;
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.TARGET));
     }
 
     @Override
-    public boolean canUse() 
-    {
+    public boolean canUse() {
         LivingEntity entity = dibsMob.getTarget();
         return entity != null && entity.isAlive() && dibsMob.canAttack(entity);
-    }   
-
-    @Override
-    public boolean canContinueToUse() 
-    {
-        LivingEntity entity = dibsMob.getTarget();
-        return entity != null && entity.isAlive() && dibsMob.distanceToSqr(entity) <= (rangedRange * rangedRange + 4.0); 
     }
 
     @Override
-    public void start() 
-    {
+    public boolean canContinueToUse() {
+        LivingEntity entity = dibsMob.getTarget();
+        return entity != null
+                && entity.isAlive()
+                && dibsMob.distanceToSqr(entity) <= (rangedRange * rangedRange + 4.0);
+    }
+
+    @Override
+    public void start() {
         target = dibsMob.getTarget();
         attackCooldown = 0;
     }
 
     @Override
-    public void stop() 
-    {
+    public void stop() {
         target = null;
         dibsMob.getNavigation().stop();
     }
 
-     @Override
-    public void tick() 
-    {
+    @Override
+    public void tick() {
         if (target == null || !target.isAlive()) return;
-
-        //look at target
-        //dibsMob.getLookControl().setLookAt(target, 30.0F, 30.0F);  // <---------------useless
 
         double distSq = dibsMob.distanceToSqr(target);
         boolean inMelee = distSq <= meleeRange * meleeRange;
         boolean inRanged = distSq <= rangedRange * rangedRange;
 
         // Approach target if out of melee range
-        if (!inMelee && pathRecompCooldown <= 0) 
-        {
+        if (!inMelee && pathRecompCooldown <= 0) {
             dibsMob.getNavigation().moveTo(target, moveSpeed);
             pathRecompCooldown = 10;
-        } 
+        }
         pathRecompCooldown--;
 
-        if (attackCooldown > 0)
-        {
+        if (attackCooldown > 0) {
             attackCooldown--;
-        }
-        else
-        {
-            if (inMelee) 
-            {
+        } else {
+            if (inMelee) {
                 tryMeleeAttack();
-            } 
-            else if (inRanged) 
-            {
-                //tryRangedAttack();
+            } else if (inRanged) {
+                // tryRangedAttack(); // still disabled like your original
             }
-            attackCooldown = 1; // 20 ticks per second; attacks per second = 20/cooldown
+            // 20 ticks per second; attacks per second = 20 / attackCooldown
+            attackCooldown = 1;
         }
-        if(DibsEntity.GetAnimController().isPlayingTriggeredAnimation())
-        {
-            if(DibsEntity.GetAnimController().hasAnimationFinished())
-            {
-                DibsEntity.GetAnimController().transitionLength(20);
-            }
-        }
+
+        // ??Removed the calls to DibsEntity.getAnimController().isPlayingTriggeredAnimation()
+        //    and .hasAnimationFinished() ??they were causing NPE if controller is null.
+        //    You still get the punch animation from triggerAnim in tryMeleeAttack().
     }
 
-    private void tryMeleeAttack()
-    {
-        DibsEntity.GetAnimController().transitionLength(0);
-        ((GeoEntity)dibsMob).triggerAnim("testing", "punchAnim");
-        //DibsEntity.GetAnimController().transitionLength(20);
+    private void tryMeleeAttack() {
+        // Make transitionLength call safe ??only if controller is non-null.
+        AnimationController<DibsEntity> controller = DibsEntity.getAnimController();
+        if (controller != null) {
+            controller.transitionLength(0);
+        }
 
-        if(dibsMob.level() instanceof ServerLevel serverLevel)
-        {
+        // Correct GeckoLib 5 way: trigger on the entity (GeoEntity), not controller
+        ((GeoEntity) dibsMob).triggerAnim("testing", "punchAnim");
+
+        if (dibsMob.level() instanceof ServerLevel serverLevel) {
             dibsMob.doHurtTarget(serverLevel, target);
         }
     }
 
-    private void tryRangedAttack()
-    {
-        // Example using a Snowball projectile, can be swapped for custom projectiles
+    private void tryRangedAttack() {
         ItemStack sBall = new ItemStack(Items.SNOWBALL);
         Snowball sb = new Snowball(dibsMob.level(), dibsMob, sBall);
         double dx = target.getX() - dibsMob.getX();
@@ -130,8 +116,7 @@ public class DibsCombatGoal extends Goal
         double dz = target.getZ() - dibsMob.getZ();
         double distance = Math.sqrt(dx * dx + dz * dz);
 
-    // set velocity — tune power and inaccuracy
-        float velocity = (float) (1.6F);
+        float velocity = 1.6F;
         float inaccuracy = 4.0F;
         sb.shoot(dx, dy + distance * 0.2, dz, velocity, inaccuracy);
 

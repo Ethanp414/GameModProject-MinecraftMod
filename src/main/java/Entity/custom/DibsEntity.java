@@ -1,23 +1,29 @@
 package Entity.custom;
 
 import Entity.client.DibsCombatGoal;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -28,54 +34,57 @@ import software.bernie.geckolib.animation.Animation;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.world.entity.player.Player;
-
 import dibs.bossfight.ModSounds;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-
-// >>> ADDED imports for synced data flag
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 
 public class DibsEntity extends Monster implements GeoEntity {
 
     // Animations
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    static AnimationController controller;
-    protected static final RawAnimation walk_anim = RawAnimation.begin().thenLoop("walk");
-    protected static final RawAnimation idle_anim = RawAnimation.begin().thenLoop("idol");
-    protected static final RawAnimation punch_anim = RawAnimation.begin().then("punch", Animation.LoopType.PLAY_ONCE);
+    private static AnimationController<DibsEntity> controller;
+    protected static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("walk");
+    protected static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idol");
+    protected static final RawAnimation PUNCH_ANIM = RawAnimation.begin().then("punch", Animation.LoopType.PLAY_ONCE);
 
+    // Boss bar
     private final ServerBossEvent bossEvent =
         new ServerBossEvent(
             Component.translatable("entity.depauldibsbossfight.dibs"),
             BossEvent.BossBarColor.BLUE,
-            BossEvent.BossBarOverlay.PROGRESS);
+            BossEvent.BossBarOverlay.PROGRESS
+        );
 
     public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimemout = 0;
+    private int idleAnimationTimeout = 0;
 
-    // ===== Audio state & tuning =====
-    private int  hurtSoundCounter = 0;
-    private int  idleSoundTimer   = 0;
+    // Audio state
+    private int hurtSoundCounter = 0;
+    private int idleSoundTimer = 0;
     private int stepGate = 0;
-    private static final int    IDLE_INTERVAL_TICKS = 200; // ~10s
-    private static final double IDLE_RANGE          = 48.0; // player proximity for idle vocals
+    private static final int IDLE_INTERVAL_TICKS = 200;
+    private static final double IDLE_RANGE = 48.0;
 
-    // >>> ADDED: Client-visible ?쏿ggro??bit we?셪l keep synced
+    // Synced data
     private static final EntityDataAccessor<Boolean> AGGRO =
             SynchedEntityData.defineId(DibsEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public DibsEntity(EntityType<? extends Monster> entityType, Level level) {
-        super(entityType, level);
+    // Synced target ID so CLIENT knows whom Dibs is attacking
+    private static final EntityDataAccessor<Integer> TARGET_ID =
+            SynchedEntityData.defineId(DibsEntity.class, EntityDataSerializers.INT);
+
+    // Track death position on client
+private static final EntityDataAccessor<Integer> DEATH_X =
+        SynchedEntityData.defineId(DibsEntity.class, EntityDataSerializers.INT);
+private static final EntityDataAccessor<Integer> DEATH_Y =
+        SynchedEntityData.defineId(DibsEntity.class, EntityDataSerializers.INT);
+private static final EntityDataAccessor<Integer> DEATH_Z =
+        SynchedEntityData.defineId(DibsEntity.class, EntityDataSerializers.INT);
+
+
+    public DibsEntity(EntityType<? extends Monster> type, Level level) {
+        super(type, level);
         bossEvent.setVisible(true);
         bossEvent.setDarkenScreen(true);
-        controller = new AnimationController<>("testing", 20, this::testAnimController);
-        // bossEvent.setCreateWorldFog(true);
     }
 
     public DibsEntity(EntityType<? extends DibsEntity> type, Level level, double x, double y, double z) {
@@ -86,10 +95,11 @@ public class DibsEntity extends Monster implements GeoEntity {
         bossEvent.setCreateWorldFog(true);
     }
 
+    // Goals
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new DibsCombatGoal(this, 2.5, 15, 1, controller));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -102,11 +112,11 @@ public class DibsEntity extends Monster implements GeoEntity {
     }
 
     private void setupAnimationStates() {
-        if (this.idleAnimationTimemout <= 0) {
-            this.idleAnimationTimemout = 80;
+        if (this.idleAnimationTimeout <= 0) {
+            this.idleAnimationTimeout = 80;
             this.idleAnimationState.start(this.tickCount);
         } else {
-            --this.idleAnimationTimemout;
+            --this.idleAnimationTimeout;
         }
     }
 
@@ -119,29 +129,33 @@ public class DibsEntity extends Monster implements GeoEntity {
         }
 
         if (!level().isClientSide) {
+
+            // Boss bar
             float progress = this.getHealth() / this.getMaxHealth();
+            bossEvent.setProgress(Math.max(0, Math.min(1, progress)));
 
-            // clamp to [0,1] in case of rounding
-            if (progress < 0f) progress = 0f;
-            if (progress > 1f) progress = 1f;
-            bossEvent.setProgress(progress);
-
-            // >>> ADDED: update synced aggro flag *server-side*
+            // --- SERVER: determine target ---
+            Entity target = this.getTarget();
+            int targetId = -1;
             boolean combatNow = false;
-            var tgt = this.getTarget();
-            if (tgt instanceof Player p) {
-                double d2 = this.distanceToSqr(p);
-                // treat as aggro if we actually have a target and it's not super far
-                combatNow = d2 <= (40.0 * 40.0);
-            }
-            setAggro(combatNow);
 
-            // Idle roar / sigh / sigh2 every ~10 seconds when a player is nearby
+            if (target instanceof Player p) {
+                targetId = p.getId();
+                combatNow = true;
+            }
+
+            // Sync to client
+            this.entityData.set(TARGET_ID, targetId);
+            this.entityData.set(AGGRO, combatNow);
+
+            System.out.println("[SERVER] Target = " + target);
+            System.out.println("[SERVER] Aggro = " + combatNow);
+
+            // Idle sounds
             idleSoundTimer++;
-            if (idleSoundTimer >= IDLE_INTERVAL_TICKS) { // ~10 seconds at 20 tps
+            if (idleSoundTimer >= IDLE_INTERVAL_TICKS) {
                 idleSoundTimer = 0;
 
-                // Do not play idle vocal if currently in hurt animation
                 if (this.hurtTime <= 0) {
                     Player nearby = this.level().getNearestPlayer(this, IDLE_RANGE);
                     if (nearby != null) {
@@ -156,12 +170,10 @@ public class DibsEntity extends Monster implements GeoEntity {
                     }
                 }
             }
-
-            // Optional: dynamic title (e.g., phase)
-            // bossEvent.setName(Component.literal("My Boss - Phase " + currentPhase));
         }
     }
 
+    // Boss bar sync
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
         super.startSeenByPlayer(player);
@@ -169,58 +181,70 @@ public class DibsEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void stopSeenByPlayer(ServerPlayer serverPlayer) {
-        super.stopSeenByPlayer(serverPlayer);
-        bossEvent.removePlayer(serverPlayer);
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        bossEvent.removePlayer(player);
     }
 
     @Override
-    public void remove(RemovalReason reason) {
+    public void remove(Entity.RemovalReason reason) {
         super.remove(reason);
         if (!level().isClientSide) {
-            bossEvent.removeAllPlayers(); // clean up when the entity is gone
+            bossEvent.removeAllPlayers();
         }
     }
 
-    // might be required?
-    @Override
-    protected void readAdditionalSaveData(ValueInput input) {}
-
-    @Override
-    protected void addAdditionalSaveData(ValueOutput output) {}
-
-    // >>> CHANGED: defineSynchedData to include AGGRO (kept your call to super)
+    // Synced data
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(AGGRO, Boolean.FALSE);
+        builder.define(TARGET_ID, -1);
+        builder.define(DEATH_X, 0);
+builder.define(DEATH_Y, 0);
+builder.define(DEATH_Z, 0);
+
     }
 
-    @Override
-    public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
-        return super.hurtServer(level, damageSource, amount);
+    // Getter for synced target
+    public int getSyncedTargetId() {
+        return this.entityData.get(TARGET_ID);
     }
 
+    public boolean isAggroed() {
+        return this.entityData.get(AGGRO);
+    }
+
+    private void setAggro(boolean value) {
+        this.entityData.set(AGGRO, value);
+    }
+
+    // Animation
     protected <E extends GeoAnimatable> PlayState testAnimController(final AnimationTest<E> animTest) {
         if (animTest.isMoving()) {
-            return animTest.setAndContinue(walk_anim);
-        } else if (!animTest.isMoving()) {
-            return animTest.setAndContinue(idle_anim);
+            return animTest.setAndContinue(WALK_ANIM);
+        } else {
+            return animTest.setAndContinue(IDLE_ANIM);
         }
-
-        return PlayState.STOP;
     }
+
+    public BlockPos getDeathPos() {
+    return new BlockPos(
+        this.entityData.get(DEATH_X),
+        this.entityData.get(DEATH_Y),
+        this.entityData.get(DEATH_Z)
+    );
+}
+
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        // empty for now no animations
-        // controller = new AnimationController<>("testing", 20, this::testAnimController);
+        controller = new AnimationController<>("testing", 20, this::testAnimController);
         controllers.add(controller);
-
-        controller.triggerableAnim("punchAnim", punch_anim);
+        controller.triggerableAnim("punchAnim", PUNCH_ANIM);
     }
 
-    public static AnimationController GetAnimController() {
+    public static AnimationController<DibsEntity> getAnimController() {
         return controller;
     }
 
@@ -229,69 +253,60 @@ public class DibsEntity extends Monster implements GeoEntity {
         return this.geoCache;
     }
 
-    // ---------------------------------------------------------------------
-    // Sound overrides
-    // ---------------------------------------------------------------------
-
-    // Plays hurt1?? every other hit (1st, 3rd, 5th, ...)
+    // Sounds
     @Override
     protected void playHurtSound(DamageSource source) {
         hurtSoundCounter++;
-        if ((hurtSoundCounter & 1) == 1) { // odd hits only
+        if ((hurtSoundCounter & 1) == 1) {
             this.playSound(ModSounds.DIBS_HURT.get(), 1.0F, 1.0F);
         }
-        // keep idle vocals from overlapping right after a hurt
-        idleSoundTimer = Math.max(idleSoundTimer, IDLE_INTERVAL_TICKS / 5); // ~2s grace
+        idleSoundTimer = Math.max(idleSoundTimer, IDLE_INTERVAL_TICKS / 5);
     }
 
-    // Footstep sound for both feet
-@Override
-protected void playStepSound(BlockPos pos, BlockState state) {
-    // Pattern 1, skip, 1, skip... but alternating 2,1,2,1 total-step gaps (≈1.5x longer)
-    stepGate++;
-    if (stepGate == 1) {
-        this.playSound(ModSounds.DIBS_FOOTSTEP.get(), 1.0F, 1.0F);
-    } else if (stepGate == 3) {
-        this.playSound(ModSounds.DIBS_FOOTSTEP.get(), 1.0F, 1.0F);
-        stepGate = 0; // reset every third call to get 2,1,2,1 spacing
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        stepGate++;
+        if (stepGate == 1) {
+            this.playSound(ModSounds.DIBS_FOOTSTEP.get(), 1.0F, 1.0F);
+        } else if (stepGate == 3) {
+            this.playSound(ModSounds.DIBS_FOOTSTEP.get(), 1.0F, 1.0F);
+            stepGate = 0;
+        }
     }
-    // else: skip this step
-}
-
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        // Randomly picks from hurt1..4 as defined in sounds.json
         return ModSounds.DIBS_HURT.get();
     }
 
-    
-
     @Override
     public SoundSource getSoundSource() {
-        // Uses the Hostile Creatures volume slider
         return SoundSource.HOSTILE;
     }
 
-    // >>> ADDED: client-readable aggro accessors (BossMusicController reads this)
-    public boolean isAggroed() {
-        return this.entityData.get(AGGRO);
-    }
-    private void setAggro(boolean value) {
-        this.entityData.set(AGGRO, value);
-    }
+@Override
+public void die(DamageSource cause) {
+    super.die(cause);
 
-    @Override
-    public void die(net.minecraft.world.damagesource.DamageSource cause) {
-        super.die(cause);
-        if (!this.level().isClientSide) {
-            this.level().playSound(
-                null,
-                this.blockPosition(),
-                dibs.bossfight.ModSounds.BOSSDEFEAT1.get(),
-                net.minecraft.sounds.SoundSource.MUSIC,
-                1.0F, 1.0F
-            );
-        }
+    if (!this.level().isClientSide) {
+
+        // Save death position for client
+        BlockPos pos = this.blockPosition();
+        this.entityData.set(DEATH_X, pos.getX());
+        this.entityData.set(DEATH_Y, pos.getY());
+        this.entityData.set(DEATH_Z, pos.getZ());
+
+        // Play defeat sound on server
+        this.level().playSound(
+            null,
+            pos,
+            ModSounds.BOSSDEFEAT1.get(),
+            SoundSource.MUSIC,
+            1.0F, 1.0F
+        );
     }
+}
+
+
+    
 }
