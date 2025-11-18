@@ -30,6 +30,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import dibs.bossfight.clients.ClientTicks;
 
 @Mod(DePaulDibsBossFight.MOD_ID)
 public class DePaulDibsBossFight {
@@ -69,6 +70,8 @@ public DePaulDibsBossFight(IEventBus modEventBus, ModContainer modContainer) {
     ModItems.register(modEventBus);
     BLOCKS.register(modEventBus);
     CREATIVE_MODE_TABS.register(modEventBus);
+    ModEntities.register(modEventBus);
+    ModSounds.SOUND_EVENTS.register(modEventBus); 
 
     // 2) Listeners on the MOD bus
     modEventBus.addListener(this::commonSetup);
@@ -78,16 +81,13 @@ public DePaulDibsBossFight(IEventBus modEventBus, ModContainer modContainer) {
     NeoForge.EVENT_BUS.register(this);
     modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
-    ModEntities.register(modEventBus);
-    modEventBus.addListener(ModCommonEvents::onAttributes);
+
 
     if (FMLEnvironment.dist == Dist.CLIENT) 
     {
         ClientEventHandler.init(modEventBus);
+        NeoForge.EVENT_BUS.addListener(ClientTicks::onClientTick);
     }
-
-ModSounds.SOUND_EVENTS.register(modEventBus);
-
 }
 
 

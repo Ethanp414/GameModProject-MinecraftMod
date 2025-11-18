@@ -2,6 +2,7 @@ package Entity;
 
 import java.util.function.Supplier;
 
+import Entity.client.ModCommonEvents;
 import Entity.custom.DibsEntity;
 import Entity.custom.GeckoEntity;
 import dibs.bossfight.DePaulDibsBossFight;
@@ -74,5 +75,6 @@ public class ModEntities
     public static void register(IEventBus eventBus)
     {
         ENTITY_TYPES.register(eventBus);
+        eventBus.addListener(ModCommonEvents::onAttributes);
     }
 }
