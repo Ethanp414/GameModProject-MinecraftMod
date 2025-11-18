@@ -1,25 +1,63 @@
-{
-  "entity/dibs/mumble": {
-    "subtitle": "subtitle.depauldibsbossfight.dibs.mumble",
+﻿{
+  "music/bossfight1": {
+    "replace": false,
     "sounds": [
-      "depauldibsbossfight:entity/dibs/mumble1",
-      "depauldibsbossfight:entity/dibs/mumble2",
-      "depauldibsbossfight:entity/dibs/mumble3"
+      {
+        "name": "depauldibsbossfight:music/bossfight1",
+        "stream": true
+      }
+    ]
+  },
+  "music/bossfight2": {
+    "replace": false,
+    "sounds": [
+      {
+        "name": "depauldibsbossfight:music/bossfight2",
+        "stream": true
+      }
+    ]
+  },
+  "music/bossdefeat1": {
+    "replace": false,
+    "sounds": [
+      {
+        "name": "depauldibsbossfight:music/bossdefeat1",
+        "stream": true,
+        "attenuation_distance": 30
+      }
     ]
   },
   "entity/dibs/hurt": {
-    "subtitle": "subtitle.depauldibsbossfight.dibs.hurt",
+    "replace": false,
     "sounds": [
-      { "name": "depauldibsbossfight:entity/dibs/hurt1", "weight": 2 },
-      { "name": "depauldibsbossfight:entity/dibs/hurt2", "weight": 2 },
-      { "name": "depauldibsbossfight:entity/dibs/hurt3", "weight": 1 },
-      { "name": "depauldibsbossfight:entity/dibs/hurt4", "weight": 1 }
+      "depauldibsbossfight:entity/dibs/hurt1",
+      "depauldibsbossfight:entity/dibs/hurt2",
+      "depauldibsbossfight:entity/dibs/hurt3",
+      "depauldibsbossfight:entity/dibs/hurt4"
     ]
   },
-  "entity/dibs/death": {
-    "subtitle": "subtitle.depauldibsbossfight.dibs.death",
+  "entity/dibs/roar": {
+    "replace": false,
     "sounds": [
-      "depauldibsbossfight:entity/dibs/death1"
+      "depauldibsbossfight:entity/dibs/roar"
+    ]
+  },
+  "entity/dibs/sigh1": {
+    "replace": false,
+    "sounds": [
+      "depauldibsbossfight:entity/dibs/sigh1"
+    ]
+  },
+  "entity/dibs/sigh2": {
+    "replace": false,
+    "sounds": [
+      "depauldibsbossfight:entity/dibs/sigh2"
+    ]
+  },
+  "entity/dibs/footstep": {
+    "replace": false,
+    "sounds": [
+      "depauldibsbossfight:entity/dibs/footstep"
     ]
   }
 }
